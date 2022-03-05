@@ -1,4 +1,5 @@
 import React from "react";
+import firebase from "firebase/app";
 // import { Container, Grid, Row, Col, Panel } from "rsuite/dist/styles/rsuite-default.css";
 import {
   Container,
@@ -11,9 +12,23 @@ import {
   IconButton,
   FacebookOfficialIcon
 } from "rsuite";
+import { auth } from "../mics/config";
 // import Col from "rsuite/lib/Carousel";
 
 const SignIn = () => {
+  const signInWithProvider = async (provider) => {
+    const result = await auth.signInWithPopup(provider);
+    console.log(result);
+  };
+
+  const onFacebookSignIn = () => {
+    signInWithProvider(new firebase.auth.FacebookAuthProvider());
+  };
+
+  const onGoogleSignIn = () => {
+    signInWithProvider(new firebase.auth.GoogleAuthProvider());
+  };
+
   return (
     <Container>
       <Grid className="mt-page">
@@ -27,10 +42,20 @@ const SignIn = () => {
 
               <div className="mt-3">
                 <ButtonToolbar>
-                  <Button block color="blue" appearance="primary">
+                  <Button
+                    block
+                    color="blue"
+                    appearance="primary"
+                    onClick={onFacebookSignIn}
+                  >
                     Continue with Facebook
                   </Button>
-                  <Button block color="green" appearance="primary">
+                  <Button
+                    block
+                    color="green"
+                    appearance="primary"
+                    onClick={onGoogleSignIn}
+                  >
                     Continue with Google
                   </Button>
                 </ButtonToolbar>
