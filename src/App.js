@@ -7,6 +7,7 @@ import SignIn from "./pages/SignIn";
 import PrivateRoute from "./components/PrivateRoute";
 import PublicRoute from "./components/PublicRoute";
 // import "rsuite/dist/styles/rsuite-default.css";
+import "rsuite/dist/rsuite.min.css";
 
 export default function App() {
   return (
