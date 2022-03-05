@@ -1,5 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/auth";
+import "firebase/database";
 
 const config = {
   apiKey: "AIzaSyA7WFds7lrw3Qc638JPdwImD6znLS_a08Q",
@@ -12,6 +13,8 @@ const config = {
 
 const app = firebase.initializeApp(config);
 export const auth = app.auth();
+export const database = app.database();
+
 //   // Import the functions you need from the SDKs you need
 // import { initializeApp } from "firebase/app";
 // // TODO: Add SDKs for Firebase products that you want to use

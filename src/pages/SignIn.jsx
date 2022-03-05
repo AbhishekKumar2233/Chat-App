@@ -1,5 +1,4 @@
 import React from "react";
-import firebase from "firebase/app";
 // import { Container, Grid, Row, Col, Panel } from "rsuite/dist/styles/rsuite-default.css";
 import {
   Container,
@@ -12,21 +11,24 @@ import {
   IconButton,
   FacebookOfficialIcon
 } from "rsuite";
-import { auth } from "../mics/config";
-// import Col from "rsuite/lib/Carousel";
+import firebase from "firebase/app";
+import { auth, database } from "../mics/config";
 
 const SignIn = () => {
   const signInWithProvider = async (provider) => {
-    const result = await auth.signInWithPopup(provider);
-    console.log(result);
-  };
+    try {
+      const { additionalUserInfo, user } = await auth.signInWithPopup(provider);
+      if (additionalUserInfo.isNewUser) {
+        await database.ref(`/profiles/${user.uid}`).set({
+          name: user.displayName,
+          createdAt: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
 
-  const onFacebookSignIn = () => {
-    signInWithProvider(new firebase.auth.FacebookAuthProvider());
-  };
-
-  const onGoogleSignIn = () => {
-    signInWithProvider(new firebase.auth.GoogleAuthProvider());
+      alert.success("Sign In", 4000);
+    } catch (err) {
+      alert.error(err.message, 4000);
+    }
   };
 
   return (
@@ -42,20 +44,10 @@ const SignIn = () => {
 
               <div className="mt-3">
                 <ButtonToolbar>
-                  <Button
-                    block
-                    color="blue"
-                    appearance="primary"
-                    onClick={onFacebookSignIn}
-                  >
+                  <Button block color="blue" appearance="primary">
                     Continue with Facebook
                   </Button>
-                  <Button
-                    block
-                    color="green"
-                    appearance="primary"
-                    onClick={onGoogleSignIn}
-                  >
+                  <Button block color="green" appearance="primary">
                     Continue with Google
                   </Button>
                 </ButtonToolbar>
