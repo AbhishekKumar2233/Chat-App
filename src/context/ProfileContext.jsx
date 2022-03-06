@@ -9,7 +9,11 @@ export const ProfileProvider = ({ children }) => {
   useEffect(() => {
     auth.onAuthStateChanged((authObj) => {
       if (authObj) {
-        database.ref(`/profiles/${authObj.uid}`).on("value", (snap) => {});
+        database.ref(`/profiles/${authObj.uid}`).on("value", (snap) => {
+          const profileData = snap.val();
+
+          console.log(profileData);
+        });
         const data = {
           uid: authObj.uid,
           email: authObj.email
