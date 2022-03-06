@@ -5,29 +5,31 @@ const ProfileContext = createContext();
 
 export const ProfileProvider = ({ children }) => {
   const [profile, setProfile] = useState(false);
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     auth.onAuthStateChanged((authObj) => {
       if (authObj) {
         database.ref(`/profiles/${authObj.uid}`).on("value", (snap) => {
-          const profileData = snap.val();
-
-          console.log(profileData);
+          const { name, createdAt } = snap.val();
+          const data = {
+            name,
+            createdAt,
+            uid: authObj.uid,
+            email: authObj.email
+          };
+          setProfile(data);
+          setLoading(false);
         });
-        const data = {
-          uid: authObj.uid,
-          email: authObj.email
-        };
-
-        setProfile(data);
       } else {
         setProfile(null);
+        setLoading(false);
       }
     });
   }, []);
 
   return (
-    <ProfileContext.Provider value={profile}>
+    <ProfileContext.Provider value={{ isLoading, profile }}>
       {children}
     </ProfileContext.Provider>
   );
