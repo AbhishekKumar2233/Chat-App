@@ -8,6 +8,7 @@ import {
   Panel,
   Button,
   ButtonToolbar,
+  Alert,
   IconButton,
   FacebookOfficialIcon
 } from "rsuite";
@@ -25,10 +26,16 @@ const SignIn = () => {
         });
       }
 
-      alert.success("Sign In", 4000);
+      alert("Sign In");
     } catch (err) {
-      alert.error(err.message, 4000);
+      alert("err.message");
     }
+  };
+
+  const onGoogleSignIn = () => {
+    signInWithProvider(new firebase.auth.GoogleAuthProvider());
+
+    console.log("Google Sign in");
   };
 
   return (
@@ -47,7 +54,12 @@ const SignIn = () => {
                   <Button block color="blue" appearance="primary">
                     Continue with Facebook
                   </Button>
-                  <Button block color="green" appearance="primary">
+                  <Button
+                    block
+                    color="green"
+                    appearance="primary"
+                    onClick={onGoogleSignIn}
+                  >
                     Continue with Google
                   </Button>
                 </ButtonToolbar>
