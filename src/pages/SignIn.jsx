@@ -17,6 +17,8 @@ import { auth, database } from "../mics/config";
 
 const SignIn = () => {
   const signInWithProvider = async (provider) => {
+    // const result = await auth.signInWithPopup(provider);
+    // console.log(result);
     try {
       const { additionalUserInfo, user } = await auth.signInWithPopup(provider);
       if (additionalUserInfo.isNewUser) {
@@ -34,8 +36,7 @@ const SignIn = () => {
 
   const onGoogleSignIn = () => {
     signInWithProvider(new firebase.auth.GoogleAuthProvider());
-
-    console.log("Google Sign in");
+    console.log("Google Sign IN");
   };
 
   return (
