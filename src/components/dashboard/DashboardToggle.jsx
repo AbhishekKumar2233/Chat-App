@@ -16,6 +16,7 @@ export default function DashboardToggle() {
       {/* <Button onClick={() => setOpen(true)}>Open</Button> */}
       <Drawer open={isOpen} onClose={close} placement="left">
         <Dashboard />
+        <Button onClick={close}>X</Button>
       </Drawer>
       {/* <Drawer placement="left" open={open} onClose={() => setOpen(false)}>
         <Dashboard />
