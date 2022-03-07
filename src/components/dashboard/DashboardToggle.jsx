@@ -11,7 +11,7 @@ export default function DashboardToggle() {
 
   //signout func
   const onSignOut = useCallback(() => {
-    auth.onSignOut();
+    auth.signOut();
 
     alert("Signed out");
     close();
