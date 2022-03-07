@@ -1,11 +1,12 @@
 import React from "react";
-import { Button, Icon, Drawer } from "rsuite";
-import { useModelState } from "../../mics/custom-hook";
+import { Button, Drawer } from "rsuite";
+import { useModelState, useMediaQuery } from "../../mics/custom-hook";
 import Dashboard from "./Index";
 
 export default function DashboardToggle() {
   const { isOpen, close, open } = useModelState();
   // const [open, setOpen] = useState(false);
+  const isMobile = useMediaQuery("(max-width:992px)");
 
   return (
     <div>
@@ -14,7 +15,7 @@ export default function DashboardToggle() {
         Dashboard
       </Button>
       {/* <Button onClick={() => setOpen(true)}>Open</Button> */}
-      <Drawer open={isOpen} onClose={close} placement="left">
+      <Drawer full={isMobile} open={isOpen} onClose={close} placement="left">
         <Dashboard />
         <Button onClick={close}>X</Button>
       </Drawer>
