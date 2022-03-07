@@ -5,6 +5,7 @@ import Dashboard from "./Index";
 
 export default function DashboardToggle() {
   const { isOpen, close, open } = useModelState();
+  // const [open, setOpen] = useState(false);
 
   return (
     <div>
@@ -12,10 +13,13 @@ export default function DashboardToggle() {
         {/* <Icon icon="dashboard" /> */}
         Dashboard
       </Button>
-      <Drawer show={isOpen} onHide={close} placement="left">
+      {/* <Button onClick={() => setOpen(true)}>Open</Button> */}
+      <Drawer open={isOpen} onClose={close} placement="left">
         <Dashboard />
-        Hyy
       </Drawer>
+      {/* <Drawer placement="left" open={open} onClose={() => setOpen(false)}>
+        <Dashboard />
+      </Drawer> */}
     </div>
   );
 }
