@@ -1,5 +1,8 @@
 import React, { useState, useCallback } from "react";
 import { Button, Input, InputGroup } from "rsuite";
+import CloseOutlineIcon from "@rsuite/icons/CloseOutline";
+import EditIcon from "@rsuite/icons/Edit";
+import CheckOutlineIcon from "@rsuite/icons/CheckOutline";
 
 export default function EditableInput({
   initialValue,
@@ -45,10 +48,12 @@ export default function EditableInput({
           onChange={onInputChange}
         />
         <InputGroup.Button onClick={onEditClick}>
-          {isEditable ? "close" : "edit2"}
+          {isEditable ? <CloseOutlineIcon /> : <EditIcon />}
         </InputGroup.Button>
         {isEditable && (
-          <InputGroup.Button onClick={onSaveClick}>check</InputGroup.Button>
+          <InputGroup.Button onClick={onSaveClick}>
+            <CheckOutlineIcon />
+          </InputGroup.Button>
         )}
       </InputGroup>
     </div>
