@@ -21,19 +21,36 @@ export default function EditableInput({
     setInput(initialValue);
   }, [initialValue]);
 
+  const onSaveClick = async () => {
+    const trimmed = input.trim();
+    if (trimmed === "") {
+      alert(emptyMsg);
+    }
+
+    if (trimmed !== initialValue) {
+      await onSave(trimmed);
+    }
+    setEditable(false);
+  };
+
   return (
     <div>
       {label}
-      <Input
-        {...inputProps}
-        value={input}
-        disabled={!isEditable}
-        placeholder={placeholder}
-        onChange={onInputChange}
-      />
-      <InputGroup.Button onClick={onEditClick}>
-        {isEditable ? "Close" : "Edit"}
-      </InputGroup.Button>
+      <InputGroup>
+        <Input
+          {...inputProps}
+          value={input}
+          disabled={!isEditable}
+          placeholder={placeholder}
+          onChange={onInputChange}
+        />
+        <InputGroup.Button onClick={onEditClick}>
+          {isEditable ? "close" : "edit2"}
+        </InputGroup.Button>
+        {isEditable && (
+          <InputGroup.Button onClick={onSaveClick}>check</InputGroup.Button>
+        )}
+      </InputGroup>
     </div>
   );
 }
