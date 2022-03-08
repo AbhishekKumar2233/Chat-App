@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, Input } from "rsuite";
+import React, { useState, useCallback } from "react";
+import { Button, Input, InputGroup } from "rsuite";
 
 export default function EditableInput({
   initialValue,
@@ -9,10 +9,31 @@ export default function EditableInput({
   emptyMsg = "Input is empty now",
   ...inputProps
 }) {
+  const [input, setInput] = useState(initialValue);
+  const [isEditable, setEditable] = useState(false);
+
+  const onInputChange = useCallback((value) => {
+    setInput(value);
+  }, []);
+
+  const onEditClick = useCallback(() => {
+    setEditable((p) => !p);
+    setInput(initialValue);
+  }, [initialValue]);
+
   return (
     <div>
       {label}
-      <Input {...inputProps} placeholder={placeholder} />
+      <Input
+        {...inputProps}
+        value={input}
+        disabled={!isEditable}
+        placeholder={placeholder}
+        onChange={onInputChange}
+      />
+      <InputGroup.Button onClick={onEditClick}>
+        {isEditable ? "Close" : "Edit"}
+      </InputGroup.Button>
     </div>
   );
 }
