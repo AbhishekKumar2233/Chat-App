@@ -3,6 +3,7 @@ import { Button, Drawer, Divider } from "rsuite";
 import { useProfile } from "../../context/ProfileContext";
 import EditableInput from "../EditableInput";
 import { database } from "../../mics/config";
+import AvtarUploadBtn from "./AvtarUploadBtn";
 
 export default function Dashboard({ onSignOut }) {
   const { profile } = useProfile();
@@ -34,6 +35,7 @@ export default function Dashboard({ onSignOut }) {
           onSave={onSave}
           label={<h6 className="md-2">Nickname</h6>}
         />
+        <AvtarUploadBtn />
       </Drawer.Body>
       <Drawer.Footer>
         <Button block color="red" appearance="primary" onClick={onSignOut}>
