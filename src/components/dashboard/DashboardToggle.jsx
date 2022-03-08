@@ -3,6 +3,7 @@ import { Button, Drawer } from "rsuite";
 import { useModelState, useMediaQuery } from "../../mics/custom-hook";
 import Dashboard from "./Index";
 import { auth } from "../../mics/config";
+import DashboardIcon from "@rsuite/icons/Dashboard";
 
 export default function DashboardToggle() {
   const { isOpen, close, open } = useModelState();
@@ -21,7 +22,7 @@ export default function DashboardToggle() {
     <div>
       <Button block color="blue" appearance="primary" onClick={open}>
         {/* <Icon icon="dashboard" /> */}
-        Dashboard
+        <DashboardIcon /> Dashboard
       </Button>
       {/* <Button onClick={() => setOpen(true)}>Open</Button> */}
       <Drawer full={isMobile} open={isOpen} onClose={close} placement="left">
