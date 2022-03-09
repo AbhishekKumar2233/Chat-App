@@ -3,11 +3,13 @@ import AvatarEditor from "react-avatar-editor";
 import { Modal, Button } from "rsuite";
 import { storage, database } from "../../mics/config";
 import { useModelState } from "../../mics/custom-hook";
-import { useProfile } from "../context/ProfileContext";
+import { useProfile } from "../../context/ProfileContext";
+import ProfileAvatar from "../ProfileAvatar";
 
 const fileInputType = ".png, .jpeg, .jpg";
 const acceptedFileTypes = ["image/png", "image/jpeg", "image/pjpeg"];
 const isValidFile = (file) => acceptedFileTypes.includes(file.type);
+
 const getBlob = (canvas) => {
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
@@ -37,7 +39,7 @@ const AvtarUploadBtn = () => {
         setImg(file);
         open();
 
-        alert(`Right File`);
+        // alert(`Right File`);
       } else {
         alert(`Wrong File Type ${file.type}`);
       }
@@ -75,6 +77,12 @@ const AvtarUploadBtn = () => {
 
   return (
     <div className="mt-3 text-center">
+      <ProfileAvatar
+        src={profile.avatar}
+        name={profile.name}
+        className="width-200 height-200 img-fullsize font-huge"
+      />
+
       <div>
         <label htmlFor="avtar-upload" className="d-block cursor-pointer padded">
           Select Your New Avatar
