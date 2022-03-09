@@ -1,12 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal, Button } from "rsuite";
 import { useModelState } from "../../mics/custom-hook";
 
-const AvtarUploadBtn = () => {
-  const fileInputType = ".png, .jpeg, .jpg";
-  const { isOpen, close, open } = useModelState();
+const fileInputType = ".png, .jpeg, .jpg";
+const acceptedFileTypes = ["image/png", "image/jpeg", "image/pjpeg"];
+const isValidFile = (file) => acceptedFileTypes.includes(file.type);
 
-  const onFileInputChange = (ev) => {};
+const AvtarUploadBtn = () => {
+  const { isOpen, close, open } = useModelState();
+  const [img, setImg] = useState(null);
+
+  const onFileInputChange = (ev) => {
+    const currFiles = ev.target.files;
+
+    if (currFiles.length === 1) {
+      const file = currFiles[0];
+
+      if (isValidFile(file)) {
+        setImg(file);
+        open();
+
+        alert(`Right File`);
+      } else {
+        alert(`Wrong File Type ${file.type}`);
+      }
+    }
+  };
 
   return (
     <div className="mt-3 text-center">
@@ -21,6 +40,7 @@ const AvtarUploadBtn = () => {
             onChange={onFileInputChange}
           />
         </label>
+        <Button onClick={open}>Open Modal</Button>
         <Modal open={isOpen} onClose={close}>
           <Modal.Header>
             <Modal.Title>Adjust and Upload new avtar</Modal.Title>
