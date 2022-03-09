@@ -1,7 +1,9 @@
 import React, { useState, useRef } from "react";
 import AvatarEditor from "react-avatar-editor";
 import { Modal, Button } from "rsuite";
+import { storage, database } from "../../mics/config";
 import { useModelState } from "../../mics/custom-hook";
+import { useProfile } from "../context/ProfileContext";
 
 const fileInputType = ".png, .jpeg, .jpg";
 const acceptedFileTypes = ["image/png", "image/jpeg", "image/pjpeg"];
@@ -22,6 +24,8 @@ const AvtarUploadBtn = () => {
   const { isOpen, close, open } = useModelState();
   const [img, setImg] = useState(null);
   const avatarEditorRef = useRef();
+  const { profile } = useProfile();
+  const [Loading, setLoading] = useState(false);
 
   const onFileInputChange = (ev) => {
     const currFiles = ev.target.files;
@@ -42,9 +46,31 @@ const AvtarUploadBtn = () => {
 
   const onUploadClick = async () => {
     const canvas = avatarEditorRef.current.getImageScaledToCanvas();
+    setLoading(true);
     try {
       const blob = await getBlob(canvas);
-    } catch (err) {}
+
+      const avatarFileRef = storage
+        .ref(`/profile/${profile.uid}`)
+        .child("avatar");
+
+      const uploadAvatarResult = await avatarFileRef.put(blob, {
+        cacheControl: `public, max-age=${3600 * 24 * 3}`
+      });
+
+      const downloadUrl = await uploadAvatarResult.ref.getDownloadURL();
+
+      const userAvatarRef = database
+        .ref(`/profiles/${profile.uid}`)
+        .child("avatar");
+
+      userAvatarRef.set(downloadUrl);
+      setLoading(false);
+      alert("Avatar has been Uploaded!");
+    } catch (err) {
+      setLoading(false);
+      alert(err.message);
+    }
   };
 
   return (
@@ -81,7 +107,12 @@ const AvtarUploadBtn = () => {
             </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button block appearance="ghost" onClick={onUploadClick}>
+            <Button
+              block
+              appearance="ghost"
+              onClick={onUploadClick}
+              disabled={Loading}
+            >
               Upload
             </Button>
           </Modal.Footer>
