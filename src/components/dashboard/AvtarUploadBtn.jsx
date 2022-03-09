@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import AvatarEditor from "react-avatar-editor";
 import { Modal, Button } from "rsuite";
 import { useModelState } from "../../mics/custom-hook";
 
@@ -43,9 +44,20 @@ const AvtarUploadBtn = () => {
         <Button onClick={open}>Open Modal</Button>
         <Modal open={isOpen} onClose={close}>
           <Modal.Header>
-            <Modal.Title>Adjust and Upload new avtar</Modal.Title>
+            <Modal.Title>Adjust and Upload new avatar</Modal.Title>
           </Modal.Header>
-          <Modal.Body>XXX</Modal.Body>
+          <Modal.Body>
+            {img && (
+              <AvatarEditor
+                image={img}
+                width={200}
+                height={200}
+                border={10}
+                borderRadius={100}
+                rotate={0}
+              />
+            )}
+          </Modal.Body>
           <Modal.Footer>
             <Button block appearance="ghost">
               Upload
