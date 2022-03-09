@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import AvatarEditor from "react-avatar-editor";
 import { Modal, Button } from "rsuite";
 import { useModelState } from "../../mics/custom-hook";
@@ -6,10 +6,22 @@ import { useModelState } from "../../mics/custom-hook";
 const fileInputType = ".png, .jpeg, .jpg";
 const acceptedFileTypes = ["image/png", "image/jpeg", "image/pjpeg"];
 const isValidFile = (file) => acceptedFileTypes.includes(file.type);
+const getBlob = (canvas) => {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) {
+        resolve(blob);
+      } else {
+        reject(new Error("process error "));
+      }
+    });
+  });
+};
 
 const AvtarUploadBtn = () => {
   const { isOpen, close, open } = useModelState();
   const [img, setImg] = useState(null);
+  const avatarEditorRef = useRef();
 
   const onFileInputChange = (ev) => {
     const currFiles = ev.target.files;
@@ -26,6 +38,13 @@ const AvtarUploadBtn = () => {
         alert(`Wrong File Type ${file.type}`);
       }
     }
+  };
+
+  const onUploadClick = async () => {
+    const canvas = avatarEditorRef.current.getImageScaledToCanvas();
+    try {
+      const blob = await getBlob(canvas);
+    } catch (err) {}
   };
 
   return (
@@ -47,19 +66,22 @@ const AvtarUploadBtn = () => {
             <Modal.Title>Adjust and Upload new avatar</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {img && (
-              <AvatarEditor
-                image={img}
-                width={200}
-                height={200}
-                border={10}
-                borderRadius={100}
-                rotate={0}
-              />
-            )}
+            <div className="d-flex justify-content-center align-items-center h-1000">
+              {img && (
+                <AvatarEditor
+                  ref={avatarEditorRef}
+                  image={img}
+                  width={200}
+                  height={200}
+                  border={10}
+                  borderRadius={100}
+                  rotate={0}
+                />
+              )}
+            </div>
           </Modal.Body>
           <Modal.Footer>
-            <Button block appearance="ghost">
+            <Button block appearance="ghost" onClick={onUploadClick}>
               Upload
             </Button>
           </Modal.Footer>
