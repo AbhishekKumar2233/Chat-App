@@ -94,7 +94,7 @@ const AvtarUploadBtn = () => {
             onChange={onFileInputChange}
           />
         </label>
-        <Button onClick={open}>Open Modal</Button>
+        
         <Modal open={isOpen} onClose={close}>
           <Modal.Header>
             <Modal.Title>Adjust and Upload new avatar</Modal.Title>
