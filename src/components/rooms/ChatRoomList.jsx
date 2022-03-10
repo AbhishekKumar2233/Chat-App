@@ -1,8 +1,11 @@
 import React from "react";
 import { Nav } from "rsuite";
 import RoomItem from "./RoomItem";
+import { useRooms } from "../../context/RoomContext";
 
 export default function ChatRoomList({ aboveElHeight }) {
+  const rooms = useRooms();
+
   return (
     <div>
       <Nav
