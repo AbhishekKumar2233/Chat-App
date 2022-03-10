@@ -9,7 +9,7 @@ export default function ChatRoomList() {
         appearance="subtle"
         vertical
         reversed
-        className="overflow-y-scroll custom-scoll"
+        className="overflow-y-scroll custom-scroll"
       >
         <Nav.Item>
           <RoomItem />
