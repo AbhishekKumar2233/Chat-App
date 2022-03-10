@@ -11,7 +11,7 @@ export default function ChatRoomList({ aboveElHeight }) {
         reversed
         className="overflow-y-scroll custom-scroll"
         style={{
-          height: `calc(100% -${aboveElHeight}px)`
+          height: `calc(100% - ${aboveElHeight}px)`
         }}
       >
         <Nav.Item>

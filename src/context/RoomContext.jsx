@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
-import { database } from "../misc/config";
+import { database } from "../mics/config";
+import { transformToArrWithId } from "../mics/helpers";
 
 const RoomsContext = createContext();
 
@@ -9,8 +10,12 @@ export const RoomsProvider = ({ children }) => {
     const roomListRef = database.ref("rooms");
 
     roomListRef.on("value", (snap) => {
-      console.log(snap.value);
+      const data = transformToArrWithId(snap.val());
+      console.log(snap.val());
     });
+    return () => {
+      roomListRef.off();
+    };
   }, []);
 
   return (
