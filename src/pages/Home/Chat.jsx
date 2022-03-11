@@ -5,6 +5,7 @@ import Message from "../../components/chat-window/messages/Index";
 import Bottom from "../../components/chat-window/bottom/Index";
 import { useRooms } from "../../context/RoomContext";
 import { Loader } from "rsuite";
+import { CurrentRoomProvider } from "../../context/CurrentRoomContext";
 
 export default function Chat() {
   const { chatId } = useParams();
@@ -20,8 +21,15 @@ export default function Chat() {
     return <h6 className="text-center mt-page">Chat {chatId} is not found</h6>;
   }
 
+  const [name, description] = currentRoom;
+
+  const currentRoomData = {
+    name,
+    description
+  };
+
   return (
-    <>
+    <CurrentRoomProvider data={currentRoomData}>
       <div className="chat-top">
         <Top />
       </div>
@@ -31,6 +39,6 @@ export default function Chat() {
       <div className="chat-bottom">
         <Bottom />
       </div>
-    </>
+    </CurrentRoomProvider>
   );
 }
