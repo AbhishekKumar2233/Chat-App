@@ -2,7 +2,7 @@ import React from "react";
 import { Grid, Row, Col } from "rsuite";
 import Sidebar from "../../components/Sidebar";
 import { RoomsProvider } from "../../context/RoomContext";
-import { Switch, Route, useRouteMatch } from "react-router";
+import { Switch, Route, useRouteMatch } from "react-router-dom";
 import Chat from "./Chat";
 import { useMediaQuery } from "../../mics/custom-hook";
 
