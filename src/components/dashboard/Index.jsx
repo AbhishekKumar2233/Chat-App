@@ -4,17 +4,27 @@ import { useProfile } from "../../context/ProfileContext";
 import EditableInput from "../EditableInput";
 import { database } from "../../mics/config";
 import AvtarUploadBtn from "./AvtarUploadBtn";
+import { getUserUpdates } from "../../mics/helpers";
 
 export default function Dashboard({ onSignOut }) {
   const { profile } = useProfile();
 
   const onSave = async (newData) => {
-    const userNicknameRef = database
-      .ref(`/profiles/${profile.uid}`)
-      .child("name");
+    // const userNicknameRef = database
+    //   .ref(`/profiles/${profile.uid}`)
+    //   .child("name");
 
     try {
-      await userNicknameRef.set(newData);
+      // await userNicknameRef.set(newData);
+
+      const updates = await getUserUpdates(
+        profile.uid,
+        "name",
+        newData,
+        database
+      );
+      await database.ref().update(updates);
+
       alert("Nickname has been updated");
     } catch (err) {
       alert(err.message);

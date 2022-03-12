@@ -5,6 +5,7 @@ import { storage, database } from "../../mics/config";
 import { useModelState } from "../../mics/custom-hook";
 import { useProfile } from "../../context/ProfileContext";
 import ProfileAvatar from "../ProfileAvatar";
+import { getUserUpdates } from "../../mics/helpers";
 
 const fileInputType = ".png, .jpeg, .jpg";
 const acceptedFileTypes = ["image/png", "image/jpeg", "image/pjpeg"];
@@ -62,11 +63,18 @@ const AvtarUploadBtn = () => {
 
       const downloadUrl = await uploadAvatarResult.ref.getDownloadURL();
 
-      const userAvatarRef = database
-        .ref(`/profiles/${profile.uid}`)
-        .child("avatar");
+      const updates = await getUserUpdates(
+        profile.uid,
+        "avatar",
+        downloadUrl,
+        database
+      );
+      await database.ref().update(updates);
+      // const userAvatarRef = database
+      //   .ref(`/profiles/${profile.uid}`)
+      //   .child("avatar");
 
-      userAvatarRef.set(downloadUrl);
+      // userAvatarRef.set(downloadUrl);
       setLoading(false);
       alert("Avatar has been Uploaded!");
     } catch (err) {
@@ -94,7 +102,7 @@ const AvtarUploadBtn = () => {
             onChange={onFileInputChange}
           />
         </label>
-        
+
         <Modal open={isOpen} onClose={close}>
           <Modal.Header>
             <Modal.Title>Adjust and Upload new avatar</Modal.Title>
