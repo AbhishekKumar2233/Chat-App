@@ -1,17 +1,16 @@
-import React from "react";
+import React, { memo } from "react";
 import { Button, Modal } from "rsuite";
 
 import { useCurrentRoom } from "../../../context/CurrentRoomContext";
 import { useModelState } from "../../../mics/custom-hook";
 
-export default function RoomInfoBtnModel() {
+function RoomInfoBtnModel() {
   const { isOpen, open, close } = useModelState();
   const description = useCurrentRoom((v) => v.description);
   const name = useCurrentRoom((v) => v.name);
 
   return (
     <>
-      Room Info Btn Model
       <Button onClick={open} appearance="link" className="px-0">
         Room Info
       </Button>
@@ -32,3 +31,4 @@ export default function RoomInfoBtnModel() {
     </>
   );
 }
+export default memo(RoomInfoBtnModel);

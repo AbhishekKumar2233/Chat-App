@@ -12,7 +12,7 @@ function Top() {
   return (
     <div>
       <div className="d-flex justify-content-between align-item-center">
-        <h4>
+        <h4 className="text-disappear d-flex align-items-center">
           {/* <Icon as={Link} to="/" icon="arrow-circle-left" size="2x" /> */}
           <Link
             to="/"
