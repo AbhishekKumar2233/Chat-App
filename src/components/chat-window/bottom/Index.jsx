@@ -14,7 +14,7 @@ function assembleMessage(profile, chatId) {
       createdAt: profile.createdAt,
       ...(profile.avatar ? { avatar: profile.avatar } : {})
     },
-    createdAt: firebase.databse.ServerValue.TIMESTAMP
+    createdAt: firebase.database.ServerValue.TIMESTAMP
   };
 }
 
