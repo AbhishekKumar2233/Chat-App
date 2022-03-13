@@ -2,8 +2,9 @@ import React, { useCallback } from "react";
 import { Button, Drawer } from "rsuite";
 import { useModelState, useMediaQuery } from "../../mics/custom-hook";
 import Dashboard from "./Index";
-import { auth } from "../../mics/config";
+import { auth, database } from "../../mics/config";
 import DashboardIcon from "@rsuite/icons/Dashboard";
+import { isOfflineForDatabase } from "../../context/ProfileContext";
 
 export default function DashboardToggle() {
   const { isOpen, close, open } = useModelState();
@@ -12,10 +13,17 @@ export default function DashboardToggle() {
 
   //signout func
   const onSignOut = useCallback(() => {
-    auth.signOut();
-
-    alert("Signed out");
-    close();
+    database
+      .ref(`/status/${auth.currentUser.uid}`)
+      .set(isOfflineForDatabase)
+      .then(() => {
+        auth.signOut();
+        alert("Signed out");
+        close();
+      })
+      .catch((err) => {
+        alert(err);
+      });
   }, [close]);
 
   return (

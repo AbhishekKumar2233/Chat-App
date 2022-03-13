@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import { auth, database } from "../mics/config";
 import firebase from "firebase/app";
 
-const isOfflineForDatabase = {
+export const isOfflineForDatabase = {
   state: "offline",
   last_changed: firebase.database.ServerValue.TIMESTAMP
 };
@@ -59,6 +59,7 @@ export const ProfileProvider = ({ children }) => {
         if (userStatusRef) {
           userStatusRef.off();
         }
+        database.ref(".info/connected").off();
         setProfile(null);
         setLoading(false);
       }
@@ -66,7 +67,7 @@ export const ProfileProvider = ({ children }) => {
 
     return () => {
       authUnsub(); //for unsub the user
-
+      database.ref(".info/connected").off();
       if (userRef) {
         userRef.off();
       }
