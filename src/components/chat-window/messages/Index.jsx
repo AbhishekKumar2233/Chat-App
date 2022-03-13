@@ -30,7 +30,7 @@ export default function Message() {
     <ul className="msg-list custom-scroll">
       {isChatEmpty && <li>No Message</li>}
       {canShowMessages &&
-        messages.map((msg) => <MessageItem key={msg.id} messages={msg} />)}
+        messages.map((msg) => <MessageItem key={msg.id} message={msg} />)}
     </ul>
   );
 }
