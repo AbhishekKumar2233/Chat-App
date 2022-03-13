@@ -2,6 +2,7 @@ import React from "react";
 import TimeAgo from "timeago-react";
 import { Avatar } from "rsuite";
 import ProfileAvatar from "../../ProfileAvatar";
+import ProfileInfoBtnModel from "./ProfileInfoBtnModel";
 
 export default function MessageItem({ message }) {
   const { author, createdAt, text } = message;
@@ -11,10 +12,11 @@ export default function MessageItem({ message }) {
         <ProfileAvatar
           className="ml-1"
           size="xs"
-          src={author.name}
+          src={author.avatar}
           name={author.name}
         />
         <span className="ml-2">{Avatar.name}</span>
+        <ProfileInfoBtnModel profile={author} />
         <TimeAgo
           datetime={createdAt}
           className="font-normal text-black-45 ml-2"
