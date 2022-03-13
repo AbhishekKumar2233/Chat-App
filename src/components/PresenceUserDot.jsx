@@ -1,33 +1,32 @@
 import React from "react";
-import { Badge, Button, Tooltip, Whisper } from "rsuite";
+import { Badge, Tooltip, Whisper } from "rsuite";
 import { usePresence } from "../mics/custom-hook";
-
-const getColor = (presence) => {
-  if (!presence) {
-    return "grey";
-  }
-  switch (presence.state) {
-    case "online":
-      return "green";
-    case "offline":
-      return "red";
-    default:
-      return "grey";
-  }
-};
-
-const getText = (presence) => {
-  if (!presence) {
-    return "Unknown state";
-  }
-  return presence.state === "online"
-    ? "Online"
-    : `Last Seen ${new Date(presence.last_changed).toLocaleDateString()} `;
-};
 
 export default function PresenceUserDot({ uid }) {
   const presence = usePresence(uid);
 
+  const getColor = (presence) => {
+    if (!presence) {
+      return "grey";
+    }
+    switch (presence.state) {
+      case "online":
+        return "green";
+      case "offline":
+        return "red";
+      default:
+        return "grey";
+    }
+  };
+
+  const getText = (presence) => {
+    if (!presence) {
+      return "Unknown state";
+    }
+    return presence.state === "online"
+      ? "Online"
+      : `Last Seen ${new Date(presence.last_changed).toLocaleDateString()} `;
+  };
   return (
     <Whisper
       placement="top"

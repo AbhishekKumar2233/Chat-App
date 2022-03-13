@@ -3,7 +3,7 @@ import TimeAgo from "timeago-react";
 import { Avatar } from "rsuite";
 import ProfileAvatar from "../../ProfileAvatar";
 import ProfileInfoBtnModel from "./ProfileInfoBtnModel";
-import PresenceUserDot from "../../ProfileAvatar";
+import PresenceUserDot from "../../PresenceUserDot";
 
 export default function MessageItem({ message }) {
   const { author, createdAt, text } = message;
