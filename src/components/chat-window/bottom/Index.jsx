@@ -34,9 +34,10 @@ export default function Bottom() {
     }
     const msgData = assembleMessage(profile, chatId);
     msgData.text = input;
+
     const updates = {};
 
-    const messageId = database.ref("message").push().key; //using this method we get unique key from real time database
+    const messageId = database.ref("messages").push().key; //using this method we get unique key from real time database
     updates[`/messages/${messageId}`] = msgData;
     updates[`/rooms/${chatId}/lastMessage`] = {
       ...msgData,

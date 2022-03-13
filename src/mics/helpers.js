@@ -19,7 +19,7 @@ export function transformToArrWithId(snapVal) {
 }
 
 export async function getUserUpdates(userId, keyToUpdate, value, db) {
-  const updates = [];
+  const updates = {};
 
   updates[`/profiles/${userId}/${keyToUpdate}`] = value;
 

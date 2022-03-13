@@ -19,7 +19,7 @@ export default function DashboardToggle() {
   }, [close]);
 
   return (
-    <div>
+    <>
       <Button block color="blue" appearance="primary" onClick={open}>
         {/* <Icon icon="dashboard" /> */}
         <DashboardIcon /> Dashboard
@@ -31,6 +31,6 @@ export default function DashboardToggle() {
       {/* <Drawer placement="left" open={open} onClose={() => setOpen(false)}>
         <Dashboard />
       </Drawer> */}
-    </div>
+    </>
   );
 }
