@@ -39,7 +39,7 @@ export default function EditRoomBtnDrawer() {
         A
       </Button>
 
-      <Drawer full={isMoblie} show={isOpen} onClose={close} placement="right">
+      <Drawer full={isMoblie} open={isOpen} onClose={close} placement="right">
         <Drawer.Header>
           <Drawer.Title>Edit Room</Drawer.Title>
         </Drawer.Header>
