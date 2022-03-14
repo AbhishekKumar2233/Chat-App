@@ -3,6 +3,7 @@ import { Divider } from "rsuite";
 import CreateRoomBtnModel from "./CreateRoomBtnModel";
 import DashboardToggle from "./dashboard/DashboardToggle";
 import ChatRoomList from "./rooms/ChatRoomList";
+import Userlist from "./user/Userlist";
 
 export default function Sidebar() {
   const topSidebarRef = useRef();
@@ -20,6 +21,7 @@ export default function Sidebar() {
         <CreateRoomBtnModel />
         <Divider>Join Conversation</Divider>
       </div>
+      <Userlist />
       <ChatRoomList aboveElHeight={height} />
     </div>
   );

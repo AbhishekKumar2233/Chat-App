@@ -4,7 +4,7 @@ import firebase from "firebase/app";
 import { useParams } from "react-router";
 import { useProfile } from "../../../context/ProfileContext";
 import { database } from "../../../mics/config";
-import SendIcon from '@rsuite/icons/Send';
+import SendIcon from "@rsuite/icons/Send";
 
 function assembleMessage(profile, chatId) {
   return {
@@ -78,7 +78,7 @@ export default function Bottom() {
           onClick={onSendClick}
           disabled={isLoading}
         >
-         <SendIcon />
+          <SendIcon />
         </InputGroup.Button>
       </InputGroup>
     </div>

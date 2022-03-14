@@ -24,3 +24,27 @@ export const RoomsProvider = ({ children }) => {
 };
 
 export const useRooms = () => useContext(RoomsContext);
+
+//user hook
+const UsersContext = createContext();
+
+export const UsersProvider = ({ children }) => {
+  const [users, setUsers] = useState(null);
+  useEffect(() => {
+    const userListRef = database.ref("/profiles");
+
+    userListRef.on("value", (snap) => {
+      const data = transformToArrWithId(snap.val());
+      setUsers(data);
+    });
+    return () => {
+      userListRef.off();
+    };
+  }, []);
+
+  return (
+    <UsersContext.Provider value={users}>{children}</UsersContext.Provider>
+  );
+};
+
+export const useUsers = () => useContext(UsersContext);
