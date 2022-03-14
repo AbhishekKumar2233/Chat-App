@@ -1,16 +1,16 @@
 import React from "react";
 import { Nav, Loader } from "rsuite";
-import RoomItem from "./RoomItem";
-import { useRooms } from "../../context/RoomContext";
+import { useUsers } from "../../context/UserProfileContext";
 import { Link, useLocation } from "react-router-dom";
-import UserItem from "../UserProfiles/UserItem";
+import UserItem from "./UserItem";
 
-export default function ChatRoomList({ aboveElHeight }) {
-  const rooms = useRooms();
+export default function ProfileList({ aboveElHeight }) {
+  const users = useUsers();
   // const location = useLocation();
 
   return (
     <div>
+      Profile List
       <Nav
         appearance="subtle"
         vertical
@@ -21,22 +21,23 @@ export default function ChatRoomList({ aboveElHeight }) {
         }}
         // active={location.pathname}
       >
-        {!rooms && (
+        {!users && (
           <Loader center vertical content="Loading" speed="slow" size="md" />
         )}
-        {rooms &&
-          rooms.length > 0 &&
-          rooms.map((room) => (
+        {users &&
+          users.length > 0 &&
+          users.map((user) => (
             <Nav.Item
-              to={`/chat/${room.id}`}
-              key={room.id}
-              eventKey={`/chat/${room.id}`}
+              to={`/chat/${user.id}`}
+              key={user.id}
+              eventKey={`/chat/${user.id}`}
               as={Link}
             >
-              <RoomItem room={room} />
+              <UserItem user={user} />
             </Nav.Item>
           ))}
       </Nav>
+      Done?
     </div>
   );
 }

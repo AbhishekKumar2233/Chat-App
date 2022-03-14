@@ -2,13 +2,14 @@ import React from "react";
 import TimeAgo from "timeago-react";
 import ProfileAvatar from "../ProfileAvatar";
 
-export default function RoomItem({ user }) {
-  const { createdAt, name, lastMessage } = user;
+export default function UserItem({ room }) {
+  const { createdAt, name, lastMessage } = room;
 
   return (
     <div>
+      Profile
       <div className="d-flex justify-content-between align-items-center">
-        <h3 className="text-disappear">{name}</h3>
+        <h3 className="text-disappear">{lastMessage.author.name}</h3>
         <TimeAgo
           datetime={
             lastMessage ? new Date(lastMessage.createdAt) : new Date(createdAt)

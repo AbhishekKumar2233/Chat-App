@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useCurrentRoom } from "../../../context/CurrentRoomContext";
 import { useMediaQuery } from "../../../mics/custom-hook";
 import RoomInfoBtnModel from "./RoomInfoBtnModel";
+import EditRoomBtnDrawer from "./EditRoomBtnDrawer";
 
 function Top() {
   const name = useCurrentRoom((v) => v.name);
@@ -54,7 +55,9 @@ function Top() {
           </Link>
           <span className="text-disappear">{name}</span>
         </h4>
-        <ButtonToolbar className="ws-nowrap">todo</ButtonToolbar>
+        <ButtonToolbar className="ws-nowrap">
+          <EditRoomBtnDrawer />
+        </ButtonToolbar>
       </div>
       <div className="d-flex justify-content-between align-items-center">
         <span> </span>
