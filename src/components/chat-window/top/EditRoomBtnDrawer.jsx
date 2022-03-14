@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Drawer } from "rsuite";
-import { useModelState } from "../../../mics/custom-hook";
+import { useMediaQuery, useModelState } from "../../../mics/custom-hook";
 import EditableInput from "../../EditableInput";
 import { useCurrentRoom } from "../../../context/CurrentRoomContext";
 import { database } from "../../../mics/config";
@@ -9,6 +9,7 @@ import { useParams } from "react-router";
 export default function EditRoomBtnDrawer() {
   const { chatId } = useParams();
   const { open, close, isOpen } = useModelState();
+  const isMoblie = useMediaQuery("(max-width:992px)");
 
   const updateData = (key, value) => {
     database
@@ -35,10 +36,10 @@ export default function EditRoomBtnDrawer() {
   return (
     <div>
       <Button className="br-circle" size="sm" onClick={open}>
-        Admin
+        A
       </Button>
 
-      <Drawer show={isOpen} onClose={close} placement="right">
+      <Drawer full={isMoblie} show={isOpen} onClose={close} placement="right">
         <Drawer.Header>
           <Drawer.Title>Edit Room</Drawer.Title>
         </Drawer.Header>
