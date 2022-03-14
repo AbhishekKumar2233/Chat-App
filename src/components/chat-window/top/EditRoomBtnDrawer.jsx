@@ -3,12 +3,32 @@ import { Button, Drawer } from "rsuite";
 import { useModelState } from "../../../mics/custom-hook";
 import EditableInput from "../../EditableInput";
 import { useCurrentRoom } from "../../../context/CurrentRoomContext";
+import { database } from "../../../mics/config";
+import { useParams } from "react-router";
 
 export default function EditRoomBtnDrawer() {
+  const { chatId } = useParams();
   const { open, close, isOpen } = useModelState();
 
-  const onNameSave = () => {};
-  const onDescription = () => {};
+  const updateData = (key, value) => {
+    database
+      .ref(`rooms/${chatId}`)
+      .child(key)
+      .set(value)
+      .then(() => {
+        alert("Successfully Updated");
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
+  const onNameSave = (newName) => {
+    updateData("name", newName);
+  };
+  const onDescription = (newDescription) => {
+    updateData("description", newDescription);
+  };
 
   const name = useCurrentRoom((v) => v.name);
   const description = useCurrentRoom((v) => v.description);
@@ -35,6 +55,7 @@ export default function EditRoomBtnDrawer() {
             onSave={onDescription}
             emptyMsg="Description can not be Empty"
             label={<h6 classname="mb-2"> Description</h6>}
+            wrapperClassName="mt-3"
           />
         </Drawer.Body>
         <Drawer.Footer>
