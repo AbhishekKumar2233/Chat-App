@@ -6,6 +6,8 @@ import Bottom from "../../components/chat-window/bottom/Index";
 import { useRooms } from "../../context/RoomContext";
 import { Loader } from "rsuite";
 import { CurrentRoomProvider } from "../../context/CurrentRoomContext";
+import { transformToArr } from "../../mics/helpers";
+import { auth } from "../../mics/config";
 
 export default function Chat() {
   const { chatId } = useParams();
@@ -23,11 +25,14 @@ export default function Chat() {
 
   const { name, description } = currentRoom;
 
-  // const admins =
+  const admins = transformToArr(currentRoom.admins);
+  const isAdmin = admins.includes(auth.currentUser.uid);
 
   const currentRoomData = {
     name,
-    description
+    description,
+    admins,
+    isAdmin
   };
 
   return (
