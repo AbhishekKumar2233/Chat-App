@@ -23,6 +23,8 @@ export default function Chat() {
 
   const { name, description } = currentRoom;
 
+  // const admins =
+
   const currentRoomData = {
     name,
     description
