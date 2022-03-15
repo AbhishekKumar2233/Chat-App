@@ -2,7 +2,7 @@ import firebase from "firebase";
 import React, { useState, useCallback, useRef } from "react";
 import { Modal, Button, Form, Input, Schema } from "rsuite";
 import { useModelState } from "../mics/custom-hook";
-import { database } from "../mics/config";
+import { database, auth } from "../mics/config";
 
 //form validation
 const { StringType } = Schema.Types;
@@ -40,7 +40,10 @@ export default function CreateRoomBtnModel() {
 
     const newRoomdata = {
       ...formValue,
-      createdAt: firebase.database.ServerValue.TIMESTAMP
+      createdAt: firebase.database.ServerValue.TIMESTAMP,
+      admins: {
+        [auth.currentUser.uid]: true
+      }
     };
 
     try {
