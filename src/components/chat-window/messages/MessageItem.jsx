@@ -1,6 +1,6 @@
 import React from "react";
 import TimeAgo from "timeago-react";
-import { Avatar } from "rsuite";
+import { Avatar, Button } from "rsuite";
 import ProfileAvatar from "../../ProfileAvatar";
 import ProfileInfoBtnModel from "./ProfileInfoBtnModel";
 import PresenceUserDot from "../../PresenceUserDot";
@@ -15,7 +15,11 @@ export default function MessageItem({ message }) {
           size="xs"
           src={author.avatar}
           name={author.name}
-        />
+        >
+          <Button block color="blue" appearance="primary" onClick={() => {}}>
+            Make Admin
+          </Button>
+        </ProfileAvatar>
         <span className="ml-2">{Avatar.name}</span>
         <ProfileInfoBtnModel profile={author} />
         <PresenceUserDot uid={author.uid} />

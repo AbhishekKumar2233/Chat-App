@@ -3,7 +3,11 @@ import { Button, Modal } from "rsuite";
 import { useModelState } from "../../../mics/custom-hook";
 import ProfileAvatar from "../../ProfileAvatar";
 
-export default function ProfileInfoBtnModel({ profile, ...btnProps }) {
+export default function ProfileInfoBtnModel({
+  profile,
+  children,
+  ...btnProps
+}) {
   const { isOpen, close, open } = useModelState();
   const { name, avatar, createdAt } = profile;
   const memberSince = new Date(createdAt).toLocaleDateString();
@@ -28,6 +32,7 @@ export default function ProfileInfoBtnModel({ profile, ...btnProps }) {
           <p>Member since {memberSince}</p>
         </Modal.Body>
         <Modal.Footer>
+          {children}
           <Button
             block
             appearance="primary"
