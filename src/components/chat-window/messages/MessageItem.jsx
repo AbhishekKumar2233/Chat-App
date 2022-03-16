@@ -1,12 +1,21 @@
-import React from "react";
+import React, { memo } from "react";
 import TimeAgo from "timeago-react";
 import { Avatar, Button } from "rsuite";
 import ProfileAvatar from "../../ProfileAvatar";
 import ProfileInfoBtnModel from "./ProfileInfoBtnModel";
 import PresenceUserDot from "../../PresenceUserDot";
+import { useCurrentRoom } from "../../../context/CurrentRoomContext";
+import { auth } from "../../../mics/config";
 
-export default function MessageItem({ message }) {
+function MessageItem({ message }) {
   const { author, createdAt, text } = message;
+  const isAdmin = useCurrentRoom((v) => v.isAdmin);
+  const admins = useCurrentRoom((v) => v.admins);
+
+  const isMsgAuthorAdmin = admins.includes(author.uid);
+  const isAuthor = auth.currentUser.uid === author.uid;
+  const canGrantAdmin = isAdmin && !isAuthor;
+
   return (
     <li className="padded mb-1">
       <div className="d-flex align-items-center font-bolder mb-1">
@@ -34,3 +43,4 @@ export default function MessageItem({ message }) {
     </li>
   );
 }
+export default memo(MessageItem);
