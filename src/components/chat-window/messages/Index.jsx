@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { database } from "../../../mics/config";
 import { transformToArrWithId } from "../../../mics/helpers";
@@ -26,11 +26,34 @@ export default function Message() {
     };
   }, [chatId]);
 
+  const handleAdmin = useCallback(
+    async (uid) => {
+      const adminRef = database.ref(`/rooms/${chatId}/admins`);
+      let alertMsg;
+      await adminRef.transaction((admins) => {
+        if (admins) {
+          if (admins[uid]) {
+            admins[uid] = null;
+            alertMsg = "Admin permission is removed";
+          } else {
+            admins[uid] = true;
+            alertMsg = "Admin permission is granted";
+          }
+        }
+        return admins;
+      });
+      alert(alertMsg);
+    },
+    [chatId]
+  );
+
   return (
     <ul className="msg-list custom-scroll">
       {isChatEmpty && <li>No Message</li>}
       {canShowMessages &&
-        messages.map((msg) => <MessageItem key={msg.id} message={msg} />)}
+        messages.map((msg) => (
+          <MessageItem key={msg.id} message={msg} handleAdmin={handleAdmin} />
+        ))}
     </ul>
   );
 }
