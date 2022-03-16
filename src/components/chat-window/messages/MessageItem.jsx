@@ -7,7 +7,7 @@ import PresenceUserDot from "../../PresenceUserDot";
 import { useCurrentRoom } from "../../../context/CurrentRoomContext";
 import { auth } from "../../../mics/config";
 
-function MessageItem({ message }) {
+function MessageItem({ message, handleAdmin }) {
   const { author, createdAt, text } = message;
   const isAdmin = useCurrentRoom((v) => v.isAdmin);
   const admins = useCurrentRoom((v) => v.admins);
@@ -24,13 +24,22 @@ function MessageItem({ message }) {
           size="xs"
           src={author.avatar}
           name={author.name}
-        >
-          <Button block color="blue" appearance="primary" onClick={() => {}}>
-            Make Admin
-          </Button>
-        </ProfileAvatar>
+        ></ProfileAvatar>
         <span className="ml-2">{Avatar.name}</span>
-        <ProfileInfoBtnModel profile={author} />
+        <ProfileInfoBtnModel profile={author}>
+          {canGrantAdmin && (
+            <Button
+              block
+              color="blue"
+              appearance="primary"
+              onClick={() => handleAdmin(author.uid)}
+            >
+              {isMsgAuthorAdmin
+                ? " Remove as Admin Permission"
+                : " Give admin in the Group"}
+            </Button>
+          )}
+        </ProfileInfoBtnModel>
         <PresenceUserDot uid={author.uid} />
         <TimeAgo
           datetime={createdAt}
