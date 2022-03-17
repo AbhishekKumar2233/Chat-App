@@ -6,6 +6,7 @@ import ProfileInfoBtnModel from "./ProfileInfoBtnModel";
 import PresenceUserDot from "../../PresenceUserDot";
 import { useCurrentRoom } from "../../../context/CurrentRoomContext";
 import { auth } from "../../../mics/config";
+import IconBtnControl from "./IconBtnControl";
 
 function MessageItem({ message, handleAdmin }) {
   const { author, createdAt, text } = message;
@@ -44,6 +45,13 @@ function MessageItem({ message, handleAdmin }) {
         <TimeAgo
           datetime={createdAt}
           className="font-normal text-black-45 ml-2"
+        />
+        <IconBtnControl
+          isVisible
+          iconName="heart"
+          tooltip="Like the message"
+          onClick={() => {}}
+          badgeContent={5}
         />
       </div>
       <div>
