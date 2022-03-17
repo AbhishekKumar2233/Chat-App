@@ -47,32 +47,29 @@ export default function Message() {
     [chatId]
   );
 
-  const handleLike = useCallback(
-    async (msgId) => {
-      const { uid } = auth.currentUser;
-      const messageRef = database.ref(`/messages/${msgId}`);
-      let alertMsg;
-      await messageRef.transaction((msg) => {
-        if (msg) {
-          if (msg.likes && msg.likes[uid]) {
-            msg.likeCount -= 1;
-            msg.likes[uid] = null;
-            alertMsg = "Like removed";
-          } else {
-            msg.likeCount += 1;
-            if (!msg.likes) {
-              msg.likes = {};
-            }
-            msg.likes[uid] = true;
-            alertMsg = "like added";
+  const handleLike = useCallback(async (msgId) => {
+    const { uid } = auth.currentUser;
+    const messageRef = database.ref(`/messages/${msgId}`);
+    let alertMsg;
+    await messageRef.transaction((msg) => {
+      if (msg) {
+        if (msg.likes && msg.likes[uid]) {
+          msg.likeCount -= 1;
+          msg.likes[uid] = null;
+          alertMsg = "Like removed";
+        } else {
+          msg.likeCount += 1;
+          if (!msg.likes) {
+            msg.likes = {};
           }
+          msg.likes[uid] = true;
+          alertMsg = "like added";
         }
-        return msg;
-      });
-      alert(alertMsg);
-    },
-    [msgId]
-  );
+      }
+      return msg;
+    });
+    alert(alertMsg);
+  }, []);
 
   return (
     <ul className="msg-list custom-scroll">
