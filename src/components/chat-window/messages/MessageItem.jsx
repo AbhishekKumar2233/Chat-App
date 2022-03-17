@@ -7,8 +7,9 @@ import PresenceUserDot from "../../PresenceUserDot";
 import { useCurrentRoom } from "../../../context/CurrentRoomContext";
 import { auth } from "../../../mics/config";
 import IconBtnControl from "./IconBtnControl";
+import Icon from "@rsuite/icons/lib/Icon";
 
-function MessageItem({ message, handleAdmin }) {
+function MessageItem({ message, handleAdmin, handleLike }) {
   const { author, createdAt, text } = message;
   const isAdmin = useCurrentRoom((v) => v.isAdmin);
   const admins = useCurrentRoom((v) => v.admins);
@@ -47,10 +48,11 @@ function MessageItem({ message, handleAdmin }) {
           className="font-normal text-black-45 ml-2"
         />
         <IconBtnControl
+          {...(true ? { backgroundColor: "red" } : {})}
           isVisible
           iconName="heart"
           tooltip="Like the message"
-          onClick={() => {}}
+          onClick={() => handleLike(message.id)}
           badgeContent={5}
         />
       </div>

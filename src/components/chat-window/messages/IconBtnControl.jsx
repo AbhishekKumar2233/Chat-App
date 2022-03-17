@@ -28,12 +28,10 @@ const IconBtnControl = ({
           trigger="hover"
           speaker={<Tooltip>{tooltip}</Tooltip>}
         >
-          <IconButton
+          <img
             {...props}
             onClick={onClick}
-            circle
-            size="xs"
-            icon={<Icon icon={iconName} />}
+            src="https://img.icons8.com/ios-glyphs/30/000000/like--v1.png"
           />
         </Whisper>
       </ConditionalBadge>
