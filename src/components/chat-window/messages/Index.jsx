@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { database } from "../../../mics/config";
+import { auth, database } from "../../../mics/config";
 import { transformToArrWithId } from "../../../mics/helpers";
 import MessageItem from "./MessageItem";
 
@@ -47,12 +47,44 @@ export default function Message() {
     [chatId]
   );
 
+  const handleLike = useCallback(
+    async (msgId) => {
+      const { uid } = auth.currentUser;
+      const messageRef = database.ref(`/messages/${msgId}`);
+      let alertMsg;
+      await messageRef.transaction((msg) => {
+        if (msg) {
+          if (msg.likes && msg.likes[uid]) {
+            msg.likeCount -= 1;
+            msg.likes[uid] = null;
+            alertMsg = "Like removed";
+          } else {
+            msg.likeCount += 1;
+            if (!msg.likes) {
+              msg.likes = {};
+            }
+            msg.likes[uid] = true;
+            alertMsg = "like added";
+          }
+        }
+        return msg;
+      });
+      alert(alertMsg);
+    },
+    [msgId]
+  );
+
   return (
     <ul className="msg-list custom-scroll">
       {isChatEmpty && <li>No Message</li>}
       {canShowMessages &&
         messages.map((msg) => (
-          <MessageItem key={msg.id} message={msg} handleAdmin={handleAdmin} />
+          <MessageItem
+            key={msg.id}
+            message={msg}
+            handleAdmin={handleAdmin}
+            handleLike={handleLike}
+          />
         ))}
     </ul>
   );
