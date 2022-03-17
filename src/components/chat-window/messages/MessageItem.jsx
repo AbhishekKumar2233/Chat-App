@@ -8,15 +8,20 @@ import { useCurrentRoom } from "../../../context/CurrentRoomContext";
 import { auth } from "../../../mics/config";
 import IconBtnControl from "./IconBtnControl";
 import Icon from "@rsuite/icons/lib/Icon";
+import { useMediaQuery } from "../../../mics/custom-hook";
 
 function MessageItem({ message, handleAdmin, handleLike }) {
-  const { author, createdAt, text } = message;
+  const { author, createdAt, text, likes, likeCount } = message;
   const isAdmin = useCurrentRoom((v) => v.isAdmin);
   const admins = useCurrentRoom((v) => v.admins);
 
+  const isMobile = useMediaQuery("(max-width:992px)");
+  // const canShowIcons = isMobile || isHovered;
   const isMsgAuthorAdmin = admins.includes(author.uid);
   const isAuthor = auth.currentUser.uid === author.uid;
   const canGrantAdmin = isAdmin && !isAuthor;
+
+  const isLiked = likes && Object.keys(likes).includes(auth.currentUser.uid);
 
   return (
     <li className="padded mb-1">
@@ -48,12 +53,12 @@ function MessageItem({ message, handleAdmin, handleLike }) {
           className="font-normal text-black-45 ml-2"
         />
         <IconBtnControl
-          {...(true ? { backgroundColor: "red" } : {})}
+          {...(isLiked ? { backgroundColor: "red" } : {})}
           isVisible
           iconName="heart"
           tooltip="Like the message"
           onClick={() => handleLike(message.id)}
-          badgeContent={5}
+          badgeContent={likeCount}
         />
       </div>
       <div>
