@@ -10,7 +10,7 @@ import IconBtnControl from "./IconBtnControl";
 import Icon from "@rsuite/icons/lib/Icon";
 import { useMediaQuery } from "../../../mics/custom-hook";
 
-function MessageItem({ message, handleAdmin, handleLike }) {
+function MessageItem({ message, handleAdmin, handleLike, handleDelete }) {
   const { author, createdAt, text, likes, likeCount } = message;
   const isAdmin = useCurrentRoom((v) => v.isAdmin);
   const admins = useCurrentRoom((v) => v.admins);
@@ -56,10 +56,18 @@ function MessageItem({ message, handleAdmin, handleLike }) {
           {...(isLiked ? { backgroundColor: "red" } : {})}
           isVisible
           iconName="heart"
-          tooltip="Like the message"
+          tooltip="Like Message"
           onClick={() => handleLike(message.id)}
           badgeContent={likeCount}
         />
+        {isAuthor && (
+          <IconBtnControl
+            isVisible
+            iconName="close"
+            tooltip="Delete Message"
+            onClick={() => handleDelete(message.id)}
+          />
+        )}
       </div>
       <div>
         <span className="word-breal-all">{text}</span>

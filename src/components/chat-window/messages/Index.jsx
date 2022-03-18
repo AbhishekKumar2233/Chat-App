@@ -71,6 +71,37 @@ export default function Message() {
     alert(alertMsg);
   }, []);
 
+  const handleDelete = useCallback(
+    async (msgId) => {
+      if (!window.confirm("Delete this message now ?")) {
+        return;
+      }
+      const isLast = messages[messages.length - 1].id === msgId;
+
+      const updates = {};
+
+      updates[`/messages/${msgId}`] = null;
+
+      if (isLast && messages.length > 1) {
+        updates[`/rooms/${chatId}/lastMessages`] = {
+          ...messages[messages.length - 2],
+          msgId: messages[messages.length - 2].id
+        };
+      }
+
+      if (isLast && messages.length === 1) {
+        updates[`/rooms/${chatId}/lastMessages`] = null;
+      }
+      try {
+        await database.ref().update(updates);
+        alert("Message is deleted now");
+      } catch (err) {
+        alert(err);
+      }
+    },
+    [chatId, messages]
+  );
+
   return (
     <ul className="msg-list custom-scroll">
       {isChatEmpty && <li>No Message</li>}
@@ -81,6 +112,7 @@ export default function Message() {
             message={msg}
             handleAdmin={handleAdmin}
             handleLike={handleLike}
+            handleDelete={handleDelete}
           />
         ))}
     </ul>
