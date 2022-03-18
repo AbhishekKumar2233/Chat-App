@@ -8,12 +8,14 @@ import { useCurrentRoom } from "../../../context/CurrentRoomContext";
 import { auth } from "../../../mics/config";
 import IconBtnControl from "./IconBtnControl";
 import Icon from "@rsuite/icons/lib/Icon";
-import { useMediaQuery } from "../../../mics/custom-hook";
+import { useHover, useMediaQuery } from "../../../mics/custom-hook";
 
 function MessageItem({ message, handleAdmin, handleLike, handleDelete }) {
   const { author, createdAt, text, likes, likeCount } = message;
   const isAdmin = useCurrentRoom((v) => v.isAdmin);
   const admins = useCurrentRoom((v) => v.admins);
+
+  const [selfRef, isHovered] = useHover();
 
   const isMobile = useMediaQuery("(max-width:992px)");
   // const canShowIcons = isMobile || isHovered;
@@ -24,7 +26,10 @@ function MessageItem({ message, handleAdmin, handleLike, handleDelete }) {
   const isLiked = likes && Object.keys(likes).includes(auth.currentUser.uid);
 
   return (
-    <li className="padded mb-1">
+    <li
+      className={`padded mb-1 cursor-pointer ${isHovered ? "bg-black-02" : ""}`}
+      ref={selfRef}
+    >
       <div className="d-flex align-items-center font-bolder mb-1">
         <ProfileAvatar
           className="ml-1"
