@@ -5,6 +5,7 @@ import { useParams } from "react-router";
 import { useProfile } from "../../../context/ProfileContext";
 import { database } from "../../../mics/config";
 import SendIcon from "@rsuite/icons/Send";
+import AttactmentBtnModel from "./AttactmentBtnModal";
 
 function assembleMessage(profile, chatId) {
   return {
@@ -67,6 +68,7 @@ export default function Bottom() {
   return (
     <div>
       <InputGroup>
+        <AttactmentBtnModel />
         <Input
           placeholder="Write a new message.."
           value={input}

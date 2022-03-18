@@ -50,25 +50,25 @@ export default function Message() {
   const handleLike = useCallback(async (msgId) => {
     const { uid } = auth.currentUser;
     const messageRef = database.ref(`/messages/${msgId}`);
-    let alertMsg;
+    // let alertMsg;
     await messageRef.transaction((msg) => {
       if (msg) {
         if (msg.likes && msg.likes[uid]) {
           msg.likeCount -= 1;
           msg.likes[uid] = null;
-          alertMsg = "Like removed";
+          // alertMsg = "Like removed";
         } else {
           msg.likeCount += 1;
           if (!msg.likes) {
             msg.likes = {};
           }
           msg.likes[uid] = true;
-          alertMsg = "like added";
+          // alertMsg = "like added";
         }
       }
       return msg;
     });
-    alert(alertMsg);
+    // alert(alertMsg);
   }, []);
 
   const handleDelete = useCallback(
