@@ -1,6 +1,8 @@
 import Icon from "@rsuite/icons/lib/Icon";
 import React from "react";
 import { Badge, IconButton, Tooltip, Whisper } from "rsuite";
+import EditIcon from "@rsuite/icons/Edit";
+import CloseIcon from "@rsuite/icons/Close";
 
 const ConditionalBadge = ({ condition, children }) => {
   return condition ? <Badge content={condition}>{children}</Badge> : children;
@@ -28,11 +30,16 @@ const IconBtnControl = ({
           trigger="hover"
           speaker={<Tooltip>{tooltip}</Tooltip>}
         >
-          <img
-            {...props}
-            onClick={onClick}
-            src="https://img.icons8.com/ios-glyphs/30/000000/like--v1.png"
-          />
+          {iconName === "heart" ? (
+            <img
+              className="likeIcon"
+              {...props}
+              onClick={onClick}
+              src="https://img.icons8.com/ios-glyphs/30/000000/like--v1.png"
+            />
+          ) : (
+            <CloseIcon {...props} onClick={onClick} />
+          )}
         </Whisper>
       </ConditionalBadge>
     </div>

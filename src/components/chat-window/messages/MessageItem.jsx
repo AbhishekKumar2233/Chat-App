@@ -18,7 +18,7 @@ function MessageItem({ message, handleAdmin, handleLike, handleDelete }) {
   const [selfRef, isHovered] = useHover();
 
   const isMobile = useMediaQuery("(max-width:992px)");
-  // const canShowIcons = isMobile || isHovered;
+  const canShowIcons = isMobile || isHovered;
   const isMsgAuthorAdmin = admins.includes(author.uid);
   const isAuthor = auth.currentUser.uid === author.uid;
   const canGrantAdmin = isAdmin && !isAuthor;
@@ -59,7 +59,7 @@ function MessageItem({ message, handleAdmin, handleLike, handleDelete }) {
         />
         <IconBtnControl
           {...(isLiked ? { backgroundColor: "red" } : {})}
-          isVisible
+          isVisible={canShowIcons}
           iconName="heart"
           tooltip="Like Message"
           onClick={() => handleLike(message.id)}
@@ -67,7 +67,7 @@ function MessageItem({ message, handleAdmin, handleLike, handleDelete }) {
         />
         {isAuthor && (
           <IconBtnControl
-            isVisible
+            isVisible={canShowIcons}
             iconName="close"
             tooltip="Delete Message"
             onClick={() => handleDelete(message.id)}
