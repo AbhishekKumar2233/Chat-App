@@ -83,14 +83,14 @@ export default function Message() {
       updates[`/messages/${msgId}`] = null;
 
       if (isLast && messages.length > 1) {
-        updates[`/rooms/${chatId}/lastMessages`] = {
+        updates[`/rooms/${chatId}/lastMessage`] = {
           ...messages[messages.length - 2],
           msgId: messages[messages.length - 2].id
         };
       }
 
       if (isLast && messages.length === 1) {
-        updates[`/rooms/${chatId}/lastMessages`] = null;
+        updates[`/rooms/${chatId}/lastMessage`] = null;
       }
       try {
         await database.ref().update(updates);
