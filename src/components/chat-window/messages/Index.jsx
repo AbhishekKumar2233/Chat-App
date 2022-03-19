@@ -3,28 +3,45 @@ import { useParams } from "react-router";
 import { auth, database } from "../../../mics/config";
 import { groupBy, transformToArrWithId } from "../../../mics/helpers";
 import MessageItem from "./MessageItem";
+import { Button } from "rsuite";
 
+const PAGE_SIZE = 15;
+const messagesRef = database.ref("/messages");
 export default function Message() {
   const { chatId } = useParams();
   const [messages, setMessages] = useState(null);
+  const [limit, setLimit] = useState(PAGE_SIZE);
 
   const isChatEmpty = messages && messages.length === 0;
   const canShowMessages = messages && messages.length > 0;
 
-  useEffect(() => {
-    const messagesRef = database.ref("/messages");
-    messagesRef
-      .orderByChild("roomId")
-      .equalTo(chatId)
-      .on("value", (snap) => {
-        const data = transformToArrWithId(snap.val());
-        setMessages(data);
-      });
+  const loadMessages = useCallback(
+    (limitToLast) => {
+      messagesRef.off();
 
+      messagesRef
+        .orderByChild("roomId")
+        .equalTo(chatId)
+        .limitToLast(limitToLast || PAGE_SIZE)
+        .on("value", (snap) => {
+          const data = transformToArrWithId(snap.val());
+          setMessages(data);
+        });
+      setLimit((p) => p + PAGE_SIZE);
+    },
+    [chatId]
+  );
+
+  const onLoadMore = useCallback(() => {
+    loadMessages(limit);
+  }, [loadMessages, limit]);
+
+  useEffect(() => {
+    loadMessages();
     return () => {
       messagesRef.off("value");
     };
-  }, [chatId]);
+  }, [loadMessages]);
 
   const handleAdmin = useCallback(
     async (uid) => {
@@ -134,6 +151,13 @@ export default function Message() {
 
   return (
     <ul className="msg-list custom-scroll">
+      {messages && messages.length >= PAGE_SIZE && (
+        <li className="text-center mt-2 mb-2">
+          <Button onClick={onLoadMore} appearence="primary" color="green">
+            Load More
+          </Button>
+        </li>
+      )}
       {isChatEmpty && <li>No Message</li>}
       {canShowMessages && renderMessages()}
     </ul>
