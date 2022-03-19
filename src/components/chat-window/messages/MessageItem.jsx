@@ -9,9 +9,22 @@ import { auth } from "../../../mics/config";
 import IconBtnControl from "./IconBtnControl";
 import Icon from "@rsuite/icons/lib/Icon";
 import { useHover, useMediaQuery } from "../../../mics/custom-hook";
+import ImgBtnModal from "./ImgBtnModal";
+
+const renderFileMessage = (file) => {
+  if (file.contentType.includes("image")) {
+    return (
+      <div className="height-220">
+        <ImgBtnModal src={file.url} fileName={file.name} />
+      </div>
+    );
+  }
+
+  return <a href={file.url}>DownLoad {file.name}</a>;
+};
 
 function MessageItem({ message, handleAdmin, handleLike, handleDelete }) {
-  const { author, createdAt, text, likes, likeCount } = message;
+  const { author, createdAt, text, file, likes, likeCount } = message;
   const isAdmin = useCurrentRoom((v) => v.isAdmin);
   const admins = useCurrentRoom((v) => v.admins);
 
@@ -75,7 +88,8 @@ function MessageItem({ message, handleAdmin, handleLike, handleDelete }) {
         )}
       </div>
       <div>
-        <span className="word-breal-all">{text}</span>
+        {text && <span className="word-breal-all">{text}</span>}
+        {file && renderFileMessage(file)}
       </div>
     </li>
   );
