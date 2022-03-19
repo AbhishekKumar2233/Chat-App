@@ -11,18 +11,6 @@ import Icon from "@rsuite/icons/lib/Icon";
 import { useHover, useMediaQuery } from "../../../mics/custom-hook";
 import ImgBtnModal from "./ImgBtnModal";
 
-const renderFileMessage = (file) => {
-  if (file.contentType.includes("image")) {
-    return (
-      <div className="height-220">
-        <ImgBtnModal src={file.url} fileName={file.name} />
-      </div>
-    );
-  }
-
-  return <a href={file.url}>DownLoad {file.name}</a>;
-};
-
 function MessageItem({ message, handleAdmin, handleLike, handleDelete }) {
   const { author, createdAt, text, file, likes, likeCount } = message;
   const isAdmin = useCurrentRoom((v) => v.isAdmin);
@@ -37,6 +25,18 @@ function MessageItem({ message, handleAdmin, handleLike, handleDelete }) {
   const canGrantAdmin = isAdmin && !isAuthor;
 
   const isLiked = likes && Object.keys(likes).includes(auth.currentUser.uid);
+
+  function renderFileMessage(file) {
+    if (file.contentType.includes("image")) {
+      return (
+        <div className="height-220">
+          <ImgBtnModal src={file.url} fileName={file.name} />
+        </div>
+      );
+    }
+
+    return <a href={file.url}>DownLoad {file.name}</a>;
+  }
 
   return (
     <li
