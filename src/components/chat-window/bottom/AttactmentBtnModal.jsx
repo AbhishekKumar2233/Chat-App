@@ -7,11 +7,11 @@ import { useParams } from "react-router";
 
 const MAX_FILE_SIZE = 1000 * 1024 * 5;
 
-export default function AttactmentBtnModel() {
+export default function AttactmentBtnModel({ afterUpload }) {
   const { chatId } = useParams;
   const { isOpen, open, close } = useModelState();
   const [fileList, setFileList] = useState([]);
-  const [isLoading, setLoading] = useState();
+  const [isLoading, setLoading] = useState(false);
 
   const onChange = (fileArr) => {
     const filtered = fileArr
@@ -32,8 +32,22 @@ export default function AttactmentBtnModel() {
       });
 
       const uploadSnapshots = await Promise.all(UploadPromises);
+
+      const shapePromises = uploadSnapshots.map(async (snap) => {
+        return {
+          contentType: snap.metadata.contentType,
+          name: snap.metadata.name,
+          url: await snap.ref.getDownloadURL()
+        };
+      });
+      const files = await Promise.all(shapePromises);
+
+      await afterUpload(files);
+      setLoading(false);
+      close();
     } catch (err) {
       alert(err);
+      setLoading(false);
     }
   };
 
