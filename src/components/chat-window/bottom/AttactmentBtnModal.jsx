@@ -5,7 +5,7 @@ import { useModelState } from "../../../mics/custom-hook";
 import { storage } from "../../../mics/config";
 import { useParams } from "react-router";
 
-const MAX_FILE_SIZE = 1000 * 1024 * 5;
+const MAX_FILE_SIZE = 1000 * 1024 * 50;
 
 export default function AttactmentBtnModel({ afterUpload }) {
   const { chatId } = useParams;
@@ -73,7 +73,7 @@ export default function AttactmentBtnModel({ afterUpload }) {
         </Modal.Body>
         <Modal.Footer>
           <div className="text-right mt-2">
-            <small>* only files less than 5 mb are allowed</small>
+            <small>* only files less than 50 mb are allowed</small>
           </div>
           <Button block disabled={isLoading} onClick={onUpload}>
             Send to chat

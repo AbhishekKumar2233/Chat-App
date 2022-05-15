@@ -7,7 +7,7 @@ import { useProfile } from "../../context/ProfileContext";
 import ProfileAvatar from "../ProfileAvatar";
 import { getUserUpdates } from "../../mics/helpers";
 
-const fileInputType = ".png, .jpeg, .jpg";
+const fileInputType = ".png, .jpeg, .jpg, .mp4, .mp3";
 const acceptedFileTypes = ["image/png", "image/jpeg", "image/pjpeg"];
 const isValidFile = (file) => acceptedFileTypes.includes(file.type);
 
