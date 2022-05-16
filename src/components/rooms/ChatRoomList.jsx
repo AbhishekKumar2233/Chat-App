@@ -5,7 +5,7 @@ import { useRooms } from "../../context/RoomContext";
 import { Link, useLocation } from "react-router-dom";
 import UserItem from "../UserProfiles/UserItem";
 
-export default function ChatRoomList({ aboveElHeight }) {
+export default function ChatRoomList() {
   const rooms = useRooms();
   // const location = useLocation();
 
@@ -16,9 +16,7 @@ export default function ChatRoomList({ aboveElHeight }) {
         vertical
         reversed
         className="overflow-y-scroll custom-scroll"
-        style={{
-          height: `calc(100% - ${aboveElHeight}px)`
-        }}
+
         // active={location.pathname}
       >
         {!rooms && (
@@ -34,6 +32,7 @@ export default function ChatRoomList({ aboveElHeight }) {
               as={Link}
             >
               <RoomItem room={room} />
+              {console.log(room.name)}
             </Nav.Item>
           ))}
       </Nav>
