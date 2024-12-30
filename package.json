@@ -8,19 +8,20 @@
   ],
   "main": "src/index.js",
   "dependencies": {
-    "firebase": "8.10.0",
-    "firebase-tools": "10.2.2",
-    "node-sass": "4.14.1",
-    "react": "17.0.2",
-    "react-avatar-editor": "11.0.12",
-    "react-dom": "17.0.2",
-    "react-router": "5.1.2",
-    "react-router-dom": "5.1.2",
-    "react-scripts": "4.0.0",
-    "react-timeago": "6.2.1",
-    "rsuite": "5.6.3",
-    "timeago-react": "3.0.4",
-    "use-context-selector": "1.3.9"
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
+    "firebase": "^9.0.0",
+    "firebase-tools": "^13.29.1",
+    "react": "^17.0.2",
+    "react-avatar-editor": "^13.0.2",
+    "react-dom": "^17.0.2",
+    "react-router": "^5.2.1",
+    "react-router-dom": "^5.2.1",
+    "react-scripts": "^5.0.1",
+    "react-timeago": "^6.2.1",
+    "rsuite": "^5.76.1",
+    "sass": "^1.66.1",
+    "timeago-react": "^3.0.4",
+    "use-context-selector": "^1.3.9"
   },
   "devDependencies": {
     "@babel/runtime": "7.13.8",
@@ -29,8 +30,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test --env=jsdom"
   },
   "browserslist": [
     ">0.2%",

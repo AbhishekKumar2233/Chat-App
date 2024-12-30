@@ -1,11 +1,12 @@
 import React, { useCallback, useState } from "react";
 import { InputGroup, Input } from "rsuite";
-import firebase from "firebase/app";
 import { useParams } from "react-router";
 import { useProfile } from "../../../context/ProfileContext";
 import { database } from "../../../mics/config";
 import SendIcon from "@rsuite/icons/Send";
 import AttactmentBtnModel from "./AttactmentBtnModal";
+import { getDatabase, ref, push, serverTimestamp } from "firebase/database"; // Firebase v9+ imports for Database
+import { getAuth } from "firebase/auth"; // Firebase v9+ import for Auth
 
 function assembleMessage(profile, chatId) {
   return {

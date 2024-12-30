@@ -1,8 +1,8 @@
-import firebase from "firebase";
+import { getDatabase, ref, push, serverTimestamp } from "firebase/database"; // Firebase v9+ imports for Database
+import { getAuth } from "firebase/auth"; // Firebase v9+ import for Auth
 import React, { useState, useCallback, useRef } from "react";
 import { Modal, Button, Form, Input, Schema } from "rsuite";
 import { useModelState } from "../mics/custom-hook";
-import { database, auth } from "../mics/config";
 
 //form validation
 const { StringType } = Schema.Types;
@@ -40,14 +40,16 @@ export default function CreateRoomBtnModel() {
 
     const newRoomdata = {
       ...formValue,
-      createdAt: firebase.database.ServerValue.TIMESTAMP,
+      createdAt: serverTimestamp(), // Updated for Firebase v9
       admins: {
-        [auth.currentUser.uid]: true
+        [getAuth().currentUser.uid]: true, // Updated for Firebase v9
       }
     };
 
     try {
-      await database.ref("rooms").push(newRoomdata);
+      const db = getDatabase(); // Initialize the database
+      const roomsRef = ref(db, 'rooms'); // Reference to 'rooms'
+      await push(roomsRef, newRoomdata); // Push new data
 
       alert(`${formValue.name} has been created`);
       setLoading(false);

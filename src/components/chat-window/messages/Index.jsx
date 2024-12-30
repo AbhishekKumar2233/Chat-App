@@ -1,18 +1,19 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
-import { auth, database } from "../../../mics/config";
+import { auth, database } from "../../../mics/config"; // Correct import
 import { groupBy, transformToArrWithId } from "../../../mics/helpers";
 import MessageItem from "./MessageItem";
 import { Button } from "rsuite";
+import { ref, onValue, off, update } from "firebase/database"; // Correct import for modular Firebase v9+
 
 const PAGE_SIZE = 15;
-const messagesRef = database.ref("/messages");
 
 function shouldScrollToBottom(node, threshold = 30) {
   const percentage =
     (100 * node.scrollTop) / (node.scrollHeight - node.clientHeight) || 0;
   return percentage > threshold;
 }
+
 export default function Message() {
   const { chatId } = useParams();
   const [messages, setMessages] = useState(null);
@@ -25,20 +26,23 @@ export default function Message() {
   const loadMessages = useCallback(
     (limitToLast) => {
       const node = selfRef.current;
-      messagesRef.off();
+      const messagesRef = ref(database, "/messages"); // Use `ref` with `database`
 
-      messagesRef
-        .orderByChild("roomId")
-        .equalTo(chatId)
-        .limitToLast(limitToLast || PAGE_SIZE)
-        .on("value", (snap) => {
+      // Remove existing listeners
+      off(messagesRef);
+
+      // Attach new value listener with limit and query
+      onValue(
+        messagesRef.orderByChild("roomId").equalTo(chatId).limitToLast(limitToLast || PAGE_SIZE),
+        (snap) => {
           const data = transformToArrWithId(snap.val());
           setMessages(data);
 
           if (shouldScrollToBottom(node)) {
             node.scrollTop = node.scrollHeight;
           }
-        });
+        }
+      );
       setLimit((p) => p + PAGE_SIZE);
     },
     [chatId]
@@ -64,15 +68,17 @@ export default function Message() {
     }, 200);
 
     return () => {
-      messagesRef.off("value");
+      const messagesRef = ref(database, "/messages");
+      off(messagesRef, "value"); // Remove listener on cleanup
     };
   }, [loadMessages]);
 
   const handleAdmin = useCallback(
     async (uid) => {
-      const adminRef = database.ref(`/rooms/${chatId}/admins`);
+      const adminRef = ref(database, `/rooms/${chatId}/admins`);
       let alertMsg;
-      await adminRef.transaction((admins) => {
+
+      await update(adminRef, (admins) => {
         if (admins) {
           if (admins[uid]) {
             admins[uid] = null;
@@ -84,6 +90,7 @@ export default function Message() {
         }
         return admins;
       });
+
       alert(alertMsg);
     },
     [chatId]
@@ -91,26 +98,23 @@ export default function Message() {
 
   const handleLike = useCallback(async (msgId) => {
     const { uid } = auth.currentUser;
-    const messageRef = database.ref(`/messages/${msgId}`);
-    // let alertMsg;
-    await messageRef.transaction((msg) => {
+    const messageRef = ref(database, `/messages/${msgId}`); // Corrected ref
+
+    await update(messageRef, (msg) => {
       if (msg) {
         if (msg.likes && msg.likes[uid]) {
           msg.likeCount -= 1;
           msg.likes[uid] = null;
-          // alertMsg = "Like removed";
         } else {
           msg.likeCount += 1;
           if (!msg.likes) {
             msg.likes = {};
           }
           msg.likes[uid] = true;
-          // alertMsg = "like added";
         }
       }
       return msg;
     });
-    // alert(alertMsg);
   }, []);
 
   const handleDelete = useCallback(
@@ -134,8 +138,10 @@ export default function Message() {
       if (isLast && messages.length === 1) {
         updates[`/rooms/${chatId}/lastMessage`] = null;
       }
+
       try {
-        await database.ref().update(updates);
+        const updatesRef = ref(database); // Get reference to database
+        await update(updatesRef, updates); // Perform the update
         alert("Message is deleted now");
       } catch (err) {
         alert(err);
@@ -169,7 +175,6 @@ export default function Message() {
       ));
 
       items.push(...msgs);
-      // items.push(1,2,3,4,5)
     });
     return items;
   };

@@ -7,7 +7,7 @@ import PresenceUserDot from "../../PresenceUserDot";
 import { useCurrentRoom } from "../../../context/CurrentRoomContext";
 import { auth } from "../../../mics/config";
 import IconBtnControl from "./IconBtnControl";
-import Icon from "@rsuite/icons/lib/Icon";
+// import Icon from "@rsuite/icons/lib/Icon";
 import { useHover, useMediaQuery } from "../../../mics/custom-hook";
 import ImgBtnModal from "./ImgBtnModal";
 

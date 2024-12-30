@@ -12,7 +12,8 @@ import {
   IconButton,
   FacebookOfficialIcon
 } from "rsuite";
-import firebase from "firebase/app";
+import { getDatabase, ref, push, serverTimestamp } from "firebase/database"; // Firebase v9+ imports for Database
+import { getAuth } from "firebase/auth"; // Firebase v9+ import for Auth
 import { auth, database } from "../mics/config";
 
 const SignIn = () => {

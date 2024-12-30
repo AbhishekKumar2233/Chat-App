@@ -11,16 +11,17 @@ import { ProfileProvider } from "./context/ProfileContext";
 import "rsuite/dist/rsuite.min.css";
 
 export default function App() {
+
   return (
     <ProfileProvider>
       <Switch>
-        <PublicRoute path="/signin">
-          <SignIn />
-        </PublicRoute>
-        <PrivateRoute path="/">
-          <Home />
-        </PrivateRoute>
-      </Switch>
+      <PublicRoute path="/signin">
+       <SignIn />
+     </PublicRoute>
+    <PrivateRoute path="/">
+     <Home />
+     </PrivateRoute>
+     </Switch>
     </ProfileProvider>
   );
 }

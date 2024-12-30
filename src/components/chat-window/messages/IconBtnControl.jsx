@@ -1,4 +1,4 @@
-import Icon from "@rsuite/icons/lib/Icon";
+// import Icon from "@rsuite/icons/lib/Icon";
 import React from "react";
 import { Badge, IconButton, Tooltip, Whisper } from "rsuite";
 import EditIcon from "@rsuite/icons/Edit";
