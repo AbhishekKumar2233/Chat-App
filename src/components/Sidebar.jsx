@@ -23,7 +23,7 @@ export default function Sidebar() {
           <Divider>Join Conversation</Divider>
         </div>
         <ChatRoomList />
-        <ProfileList />
+        {/* <ProfileList /> */}
       </div>
     </>
   );

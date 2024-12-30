@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { auth, database } from "../mics/config";
-import { ref, onValue, set, onDisconnect, get } from "firebase/database"; // Firebase v9+ imports
+import { getAuth, onAuthStateChanged } from "firebase/auth"; // Firebase v9+ imports
+import { getDatabase, ref, onValue, set, onDisconnect, get } from "firebase/database"; // Firebase v9+ imports
 
 export const isOfflineForDatabase = {
   state: "offline",
@@ -19,16 +19,23 @@ export const ProfileProvider = ({ children }) => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
+    const auth = getAuth(); // Get the Firebase auth instance
+    const database = getDatabase(); // Get the Firebase database instance
     let userRef;
     let userStatusRef;
     let connectedRef;
-    const authUnsub = auth.onAuthStateChanged((authObj) => {
+
+    // Subscribe to authentication state changes
+    const authUnsub = onAuthStateChanged(auth, async (authObj) => {
       if (authObj) {
         console.log(authObj.uid);
+
+        // Use ref to get database references
         userStatusRef = ref(database, `/status/${authObj.uid}`);
         userRef = ref(database, `/profiles/${authObj.uid}`);
-        
-        get(userRef).then((snap) => {
+
+        try {
+          const snap = await get(userRef);
           const { name, createdAt, avatar } = snap.val();
 
           const data = {
@@ -40,12 +47,15 @@ export const ProfileProvider = ({ children }) => {
           };
           setProfile(data);
           setLoading(false);
-        });
+        } catch (error) {
+          console.error("Error fetching profile:", error);
+          setLoading(false);
+        }
 
+        // Monitor the connection status
         connectedRef = ref(database, ".info/connected");
-        
+
         onValue(connectedRef, (snapshot) => {
-          // If we're not currently connected, don't do anything
           if (snapshot.val() === false) {
             return;
           }
@@ -57,35 +67,33 @@ export const ProfileProvider = ({ children }) => {
               set(userStatusRef, isOnlineForDatabase);
             });
         });
-
       } else {
+        // Cleanup listeners if no user is authenticated
         if (userRef) {
-          // Ensure proper cleanup
-          userRef.off(); // Unsubscribe from the user data
+          userRef.off(); // Unsubscribe from user data
         }
         if (userStatusRef) {
-          // Unsubscribe from the status listener
-          userStatusRef.off();
+          userStatusRef.off(); // Unsubscribe from user status
         }
         if (connectedRef) {
-          // Unsubscribe from connectedRef listener when user is not authenticated
-          connectedRef.off();
+          connectedRef.off(); // Unsubscribe from connection status
         }
-        setProfile(null);
-        setLoading(false);
+        setProfile(null); // Clear profile state
+        setLoading(false); // Stop loading when no user is authenticated
       }
     });
 
+    // Cleanup function for unsubscribing from listeners
     return () => {
-      authUnsub(); // Unsubscribe from auth changes
+      authUnsub(); // Unsubscribe from auth state changes
       if (connectedRef) {
-        connectedRef.off(); // Properly unsubscribe from the connectedRef listener
+        connectedRef.off(); // Unsubscribe from the connectedRef listener
       }
       if (userRef) {
         userRef.off(); // Unsubscribe from user data
       }
     };
-  }, []);
+  }, []); // Empty dependency array ensures this only runs once on mount
 
   return (
     <ProfileContext.Provider value={{ isLoading, profile }}>

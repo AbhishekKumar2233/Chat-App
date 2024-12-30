@@ -12,32 +12,58 @@ import {
   IconButton,
   FacebookOfficialIcon
 } from "rsuite";
-import { getDatabase, ref, push, serverTimestamp } from "firebase/database"; // Firebase v9+ imports for Database
-import { getAuth } from "firebase/auth"; // Firebase v9+ import for Auth
+import { ref, onValue, set, onDisconnect, get, serverTimestamp, getDatabase } from "firebase/database"; // Firebase v9+ imports
 import { auth, database } from "../mics/config";
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 const SignIn = () => {
   const signInWithProvider = async (provider) => {
     // const result = await auth.signInWithPopup(provider);
     // console.log(result);
     try {
-      const { additionalUserInfo, user } = await auth.signInWithPopup(provider);
+      const additionalUserInfo= await signInWithPopup(auth,provider);
+      console.log(additionalUserInfo,"additionalUserInfo")
+      const user = result.user; // Get user information from the result
       if (additionalUserInfo.isNewUser) {
-        await database.ref(`/profiles/${user.uid}`).set({
+        await set(ref(database,`/profiles/${user.uid}`),{
           name: user.displayName,
-          createdAt: firebase.database.ServerValue.TIMESTAMP
+          createdAt: serverTimestamp()
         });
       }
-
       alert("Sign In");
     } catch (err) {
+      // console.log(err,"jkjkjkjkjkkjk")
       alert("err.message");
     }
   };
 
+  // const signInWithProvider = async (provider) => {
+  //   try {
+  //     const result = await signInWithPopup(auth, provider); // Sign in with the chosen provider (Google)
+  //     const user = result.user; // Get user information from the result
+
+  //     // Check if it's a new user
+  //     if (result.additionalUserInfo.isNewUser) {
+  //       // Save user profile to the database
+  //       await set(ref(database, `/profiles/${user.uid}`), {
+  //         name: user.displayName,
+  //         email: user.email,
+  //         createdAt: serverTimestamp(), // Use server timestamp for creation time
+  //       });
+  //     }
+
+  //     // Success alert
+  //     alert("Sign In Successful");
+  //   } catch (err) {
+  //     // Error alert if something goes wrong
+  //     alert("Error during Sign In: " + err.message);
+  //   }
+  // };
+
   const onGoogleSignIn = () => {
-    signInWithProvider(new firebase.auth.GoogleAuthProvider());
-    console.log("Google Sign IN");
+    const provider = new GoogleAuthProvider(); // Create Google Auth provider
+    signInWithProvider(provider); // Call the sign-in function with Google provider
+    console.log("Google Sign In");
   };
 
   return (
@@ -53,9 +79,9 @@ const SignIn = () => {
 
               <div className="mt-3">
                 <ButtonToolbar>
-                  <Button block color="blue" appearance="primary">
+                  {/* <Button block color="blue" appearance="primary">
                     Continue with Facebook
-                  </Button>
+                  </Button> */}
                   <Button
                     block
                     color="green"

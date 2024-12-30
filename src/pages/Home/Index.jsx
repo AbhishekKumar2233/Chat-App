@@ -35,7 +35,7 @@ const Home = () => {
           </Row>
         </Grid>
       </RoomsProvider>
-      <Room2Provider>
+      {/* <Room2Provider>
         <Grid fluid className="h-100">
           <Row className="h-100">
             {canRenderSidebar && (
@@ -53,7 +53,7 @@ const Home = () => {
             </Switch>
           </Row>
         </Grid>
-      </Room2Provider>
+      </Room2Provider> */}
     </>
   );
 };

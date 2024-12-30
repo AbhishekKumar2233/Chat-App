@@ -8,6 +8,8 @@ import { Loader } from "rsuite";
 import { CurrentRoomProvider } from "../../context/CurrentRoomContext";
 import { transformToArr } from "../../mics/helpers";
 import { auth } from "../../mics/config";
+import { getDatabase, ref, onValue, set, onDisconnect, get } from "firebase/database"; // Firebase v9+ imports
+
 
 export default function Chat() {
   const { chatId } = useParams();
