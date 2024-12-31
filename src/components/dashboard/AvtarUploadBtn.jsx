@@ -90,7 +90,6 @@ const AvtarUploadBtn = () => {
         src={profile.avatar}
         name={profile.name}
       />
-
       <div>
         <label htmlFor="avtar-upload" className="d-block cursor-pointer padded">
           Select Your New Avatar
@@ -102,7 +101,6 @@ const AvtarUploadBtn = () => {
             onChange={onFileInputChange}
           />
         </label>
-
         <Modal open={isOpen} onClose={close}>
           <Modal.Header>
             <Modal.Title>Adjust and Upload new avatar</Modal.Title>

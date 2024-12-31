@@ -45,12 +45,11 @@ export default function Dashboard({ onSignOut }) {
   return (
     <div>
       <Drawer.Header>
-        <Drawer.Title>Dashboard</Drawer.Title>
+        <Drawer.Title>Hey, {profile.name}</Drawer.Title>
       </Drawer.Header>
       <Drawer.Body>
-        <h3>Hey, {profile.name}</h3>
-        <Divider />
-
+        {/* <h3>Hey, {profile.name}</h3> */}
+        {/* <Divider /> */}
         {/* Editable Input for nickname */}
         <EditableInput
           name="nickname"
@@ -58,14 +57,13 @@ export default function Dashboard({ onSignOut }) {
           onSave={onSave}
           label={<h6 className="md-2">Nickname</h6>}
         />
-
         {/* Avatar upload button */}
         <AvatarUploadBtn />
-
       </Drawer.Body>
       <Drawer.Footer>
         {/* Sign out button */}
         <Button
+        className="mt-0"
           block
           color="red"
           appearance="primary"
