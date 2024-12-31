@@ -61,7 +61,7 @@ export default function Bottom() {
       console.error("Error sending message:", error);
       alert("Failed to send message. Please try again.");
     } finally {
-      // setLoading(false);
+      setLoading(false);
     }
   };  
 
@@ -98,7 +98,7 @@ export default function Bottom() {
         console.error("Error uploading files:", error);
         alert("Failed to upload files. Please try again.");
       } finally {
-        // setLoading(false);
+        setLoading(false);
       }
     },
     [chatId, profile]

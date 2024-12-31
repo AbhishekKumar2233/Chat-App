@@ -86,7 +86,7 @@ export const ProfileProvider = ({ children }) => {
         // If the user logs out or is unauthenticated, clear profile and clean up
         if (userStatusRef) set(userStatusRef, isOfflineForDatabase);
         setProfile(null);
-        // setLoading(false);
+        setLoading(false);
       }
     });
 
