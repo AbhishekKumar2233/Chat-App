@@ -1,5 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
-import { database } from "./config";
+import { database,ref } from "./config";
+import { onValue, off } from "firebase/database";
+
 
 //hook for Drawer open/close
 export function useModelState() {
@@ -29,25 +31,32 @@ export const useMediaQuery = (query) => {
   return matches;
 };
 
-//hook for display real time presence
 export function usePresence(uid) {
   const [presence, setPresence] = useState(null);
 
   useEffect(() => {
-    const userStatusRef = database.ref(`/status/${uid}`);
+    if (!uid) return; // Avoid running if UID is not provided
 
-    userStatusRef.on("value", (snap) => {
-      if (snap.exists()) {
-        const data = snap.val();
-        setPresence(data);
+    const userStatusRef = ref(database, `/status/${uid}`);
+
+    // Attach the listener
+    const unsubscribe = onValue(userStatusRef, (snapshot) => {
+      if (snapshot.exists()) {
+        setPresence(snapshot.val());
+      } else {
+        setPresence(null); // Set presence to null if no data exists
       }
     });
+
+    // Cleanup listener
     return () => {
-      userStatusRef.off();
+      off(userStatusRef);
     };
   }, [uid]);
+
   return presence;
 }
+
 
 // Hover Hook
 export function useHover() {

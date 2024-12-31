@@ -1,7 +1,7 @@
 export function getNameInitails(name) {
-  const splitName = name.toUpperCase().split(" ");
+  const splitName = name?.toUpperCase()?.split(" ");
 
-  if (splitName.length > 1) {
+  if (splitName?.length > 1) {
     return splitName[0][0] + splitName[1][0];
   }
   return splitName[0][0];

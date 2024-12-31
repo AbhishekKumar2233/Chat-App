@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import AvatarEditor from "react-avatar-editor";
 import { Modal, Button } from "rsuite";
-import { storage, database } from "../../mics/config";
+import { storage, database,ref } from "../../mics/config";
 import { useModelState } from "../../mics/custom-hook";
 import { useProfile } from "../../context/ProfileContext";
 import ProfileAvatar from "../ProfileAvatar";
@@ -69,7 +69,7 @@ const AvtarUploadBtn = () => {
         downloadUrl,
         database
       );
-      await database.ref().update(updates);
+      await ref(database).update(updates);
       // const userAvatarRef = database
       //   .ref(`/profiles/${profile.uid}`)
       //   .child("avatar");

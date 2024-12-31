@@ -22,14 +22,14 @@ export default function RoomItem({ room }) {
           <>
             <div className="d-flex align-items-center">
               <ProfileAvatar
-                src={lastMessage.author.avatar}
-                name={lastMessage.author.name}
+                src={lastMessage?.author?.avatar}
+                name={lastMessage?.author?.name}
                 size="sm"
               />
             </div>{" "}
             <div className="text-disappear ml-2">
-              <div className="italic">{lastMessage.author.name}</div>
-              <span>{lastMessage.text || lastMessage.file.name}</span>
+              <div className="italic">{lastMessage?.author?.name}</div>
+              <span>{lastMessage?.text || lastMessage?.file?.name}</span>
             </div>
           </>
         ) : (
