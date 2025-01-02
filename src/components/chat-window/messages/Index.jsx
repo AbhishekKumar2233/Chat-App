@@ -4,7 +4,7 @@ import { auth, database } from "../../../mics/config";
 import { groupBy, transformToArrWithId } from "../../../mics/helpers";
 import MessageItem from "./MessageItem";
 import { Button } from "rsuite";
-import { ref, query, orderByChild, equalTo, limitToLast, onValue, off, update } from "firebase/database";
+import { ref, query, orderByChild, equalTo, limitToLast, onValue, off, update, get } from "firebase/database";
 
 const PAGE_SIZE = 15;
 
@@ -102,22 +102,35 @@ export default function Message() {
   const handleLike = useCallback(
     async (msgId) => {
       const { uid } = auth.currentUser || {};
+      if (!uid) {
+        alert("User is not authenticated");
+        return;
+      }
+  
       const messageRef = ref(database, `/messages/${msgId}`);
-
       try {
-        await update(messageRef, (msg) => {
-          if (msg) {
-            if (msg.likes && msg.likes[uid]) {
-              msg.likeCount -= 1;
-              msg.likes[uid] = null;
-            } else {
-              msg.likeCount = (msg.likeCount || 0) + 1;
-              msg.likes = { ...msg.likes, [uid]: true };
-            }
-          }
-          return msg;
-        });
+        // Get the current message data
+        const snapshot = await get(messageRef);
+        if (snapshot.exists()) {
+          const msg = snapshot.val();
+  
+          // Modify the message data
+          const updatedMsg = {
+            ...msg,
+            likeCount: msg.likes && msg.likes[uid] ? msg.likeCount - 1 : (msg.likeCount || 0) + 1,
+            likes: {
+              ...msg.likes,
+              [uid]: msg.likes && msg.likes[uid] ? null : true,
+            },
+          };
+  
+          // Update the database
+          await update(messageRef, updatedMsg);
+        } else {
+          alert("Message not found");
+        }
       } catch (err) {
+        console.error("Failed to update likes:", err);
         alert("Failed to update likes");
       }
     },

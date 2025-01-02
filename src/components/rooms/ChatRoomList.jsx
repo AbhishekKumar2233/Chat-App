@@ -7,7 +7,6 @@ import UserItem from "../UserProfiles/UserItem";
 
 export default function ChatRoomList() {
   const rooms = useRooms();
-  // const location = useLocation();
 
   return (
     <div>
@@ -17,7 +16,6 @@ export default function ChatRoomList() {
         reversed
         className="overflow-y-scroll custom-scroll"
 
-        // active={location.pathname}
       >
         {!rooms && (
           <Loader center vertical content="Loading" speed="slow" size="md" />

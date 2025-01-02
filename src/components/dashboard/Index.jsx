@@ -1,44 +1,51 @@
-import React, { useState } from "react";
-import { Button, Drawer, Divider, Notification } from "rsuite";
+import React, { useState, useEffect } from "react";
+import { Button, Drawer, Notification, useToaster } from "rsuite";
 import { useProfile } from "../../context/ProfileContext";
 import EditableInput from "../EditableInput";
+import { ref, update } from "firebase/database";
 import { database } from "../../mics/config";
 import AvatarUploadBtn from "./AvtarUploadBtn";
-import { getUserUpdates } from "../../mics/helpers";
 
 export default function Dashboard({ onSignOut }) {
-  const { profile } = useProfile();
+  const { profile, setProfile } = useProfile(); // Ensure setProfile is accessible
   const [loading, setLoading] = useState(false);
+  const toaster = useToaster(); // Initialize the toaster for notifications
+
+  // Helper to show notifications
+  const showNotification = (type, title, description) => {
+    toaster.push(
+      <Notification type={type} header={title}>
+        {description}
+      </Notification>,
+      { placement: "topCenter" }
+    );
+  };
 
   // Function to save the new nickname
   const onSave = async (newData) => {
-    setLoading(true); // Set loading state while saving data
+    if (!profile.uid) {
+      showNotification("error", "Error", "User ID is missing. Please try again.");
+      return;
+    }
+
+    setLoading(true);
 
     try {
-      // Get updates for user profile in the database
-      const updates = await getUserUpdates(
-        profile.uid,
-        "name",
-        newData,
-        database
-      );
+      // Path to the user's profile in the database
+      const userRef = ref(database, `profiles/${profile.uid}`);
 
-      // Apply updates to the database
-      await database.ref().update(updates);
+      // Update the nickname in the database
+      await update(userRef, { name: newData });
 
-      // Notify user on success
-      Notification.success({
-        title: "Success",
-        description: "Nickname has been updated",
-      });
+      // Update profile state locally
+      setProfile((prev) => ({ ...prev, name: newData }));
+
+      showNotification("success", "Success", "Nickname has been updated.");
     } catch (err) {
-      // Handle error if the operation fails
-      Notification.error({
-        title: "Error",
-        description: err.message,
-      });
+      console.error("Error updating nickname:", err.message);
+      showNotification("error", "Error", err.message || "Failed to update nickname.");
     } finally {
-      setLoading(false); // Reset loading state
+      setLoading(false);
     }
   };
 
@@ -48,8 +55,6 @@ export default function Dashboard({ onSignOut }) {
         <Drawer.Title>Hey, {profile.name}</Drawer.Title>
       </Drawer.Header>
       <Drawer.Body>
-        {/* <h3>Hey, {profile.name}</h3> */}
-        {/* <Divider /> */}
         {/* Editable Input for nickname */}
         <EditableInput
           name="nickname"
@@ -63,7 +68,6 @@ export default function Dashboard({ onSignOut }) {
       <Drawer.Footer>
         {/* Sign out button */}
         <Button
-        className="mt-0"
           block
           color="red"
           appearance="primary"

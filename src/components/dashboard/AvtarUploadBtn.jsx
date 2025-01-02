@@ -1,16 +1,20 @@
 import React, { useState, useRef } from "react";
 import AvatarEditor from "react-avatar-editor";
 import { Modal, Button } from "rsuite";
+import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "firebase/storage"; // Firebase storage methods (v9+)
+import { getDatabase, update } from "firebase/database"; // Firebase database methods (v9+)
 import { storage, database,ref } from "../../mics/config";
 import { useModelState } from "../../mics/custom-hook";
 import { useProfile } from "../../context/ProfileContext";
 import ProfileAvatar from "../ProfileAvatar";
 import { getUserUpdates } from "../../mics/helpers";
 
+// File type validation
 const fileInputType = ".png, .jpeg, .jpg, .mp4, .mp3";
 const acceptedFileTypes = ["image/png", "image/jpeg", "image/pjpeg"];
 const isValidFile = (file) => acceptedFileTypes.includes(file.type);
 
+// Convert canvas to blob
 const getBlob = (canvas) => {
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
@@ -28,8 +32,9 @@ const AvtarUploadBtn = () => {
   const [img, setImg] = useState(null);
   const avatarEditorRef = useRef();
   const { profile } = useProfile();
-  const [Loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
+  // Handle file input change
   const onFileInputChange = (ev) => {
     const currFiles = ev.target.files;
 
@@ -39,49 +44,60 @@ const AvtarUploadBtn = () => {
       if (isValidFile(file)) {
         setImg(file);
         open();
-
-        // alert(`Right File`);
       } else {
         alert(`Wrong File Type ${file.type}`);
       }
     }
   };
 
+  const getUserUpdates = (uid, field, value) => {
+    const updates = {};
+    updates[`/profiles/${uid}/${field}`] = value;
+    return updates; // Return the updates object
+  };
+
+  // Handle upload click
   const onUploadClick = async () => {
     const canvas = avatarEditorRef.current.getImageScaledToCanvas();
     setLoading(true);
+  
     try {
       const blob = await getBlob(canvas);
-
-      const avatarFileRef = storage
-        .ref(`/profile/${profile.uid}`)
-        .child("avatar");
-
-      const uploadAvatarResult = await avatarFileRef.put(blob, {
-        cacheControl: `public, max-age=${3600 * 24 * 3}`
+  
+      const storage = getStorage();
+      const avatarFileRef = storageRef(storage, `/profile/${profile.uid}/avatar`);
+  
+      const uploadAvatarResult = uploadBytesResumable(avatarFileRef, blob, {
+        cacheControl: `public, max-age=${3600 * 24 * 3}`,
       });
-
-      const downloadUrl = await uploadAvatarResult.ref.getDownloadURL();
-
-      const updates = await getUserUpdates(
-        profile.uid,
-        "avatar",
-        downloadUrl,
-        database
+  
+      uploadAvatarResult.on(
+        "state_changed",
+        null,
+        (error) => {
+          throw new Error(error.message);
+        },
+        async () => {
+          const downloadUrl = await getDownloadURL(uploadAvatarResult.snapshot.ref);
+  
+          const db = getDatabase();
+          const updates = getUserUpdates(profile.uid, "avatar", downloadUrl);
+          const dbRef = ref(db);
+          await update(dbRef, updates);
+  
+          setLoading(false);
+          alert("Avatar has been uploaded!");
+  
+          // Close the modal
+          close(); // Ensure this function is closing the modal properly
+        }
       );
-      await ref(database).update(updates);
-      // const userAvatarRef = database
-      //   .ref(`/profiles/${profile.uid}`)
-      //   .child("avatar");
-
-      // userAvatarRef.set(downloadUrl);
-      setLoading(false);
-      alert("Avatar has been Uploaded!");
     } catch (err) {
       setLoading(false);
       alert(err.message);
     }
   };
+  
 
   return (
     <div className="mt-3 text-center">
@@ -125,7 +141,7 @@ const AvtarUploadBtn = () => {
               block
               appearance="ghost"
               onClick={onUploadClick}
-              disabled={Loading}
+              disabled={loading}
             >
               Upload
             </Button>
