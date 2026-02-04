@@ -25,15 +25,19 @@ export default function Message() {
   const loadMessages = useCallback(
     (limitToLastCount = PAGE_SIZE) => {
       const node = selfRef.current;
+
       const messagesRef = query(
-        ref(database, "/messages"),
-        orderByChild("roomId"),
+        ref(database, "messages"),
+        orderByChild("chatId"), // ✅ FIXED
         equalTo(chatId),
         limitToLast(limitToLastCount)
       );
 
-      onValue(messagesRef, (snap) => {
-        const data = transformToArrWithId(snap.val());
+      const unsubscribe = onValue(messagesRef, (snap) => {
+        const data = snap.exists()
+          ? transformToArrWithId(snap.val())
+          : [];
+
         setMessages(data);
 
         if (node && shouldScrollToBottom(node)) {
@@ -42,9 +46,13 @@ export default function Message() {
       });
 
       setLimit((prev) => prev + PAGE_SIZE);
+
+      // ✅ Cleanup listener (VERY important)
+      return () => off(messagesRef);
     },
     [chatId]
   );
+
 
   const onLoadMore = useCallback(() => {
     const node = selfRef.current;
