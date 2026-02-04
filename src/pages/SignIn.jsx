@@ -30,7 +30,7 @@ const SignIn = () => {
           createdAt: serverTimestamp()
         });
       }
-      alert("Sign In");
+      // alert("Sign In");
     } catch (err) {
       // console.log(err,"jkjkjkjkjkkjk")
       // alert("err.message");
@@ -101,3 +101,4 @@ const SignIn = () => {
 };
 
 export default SignIn;
+
