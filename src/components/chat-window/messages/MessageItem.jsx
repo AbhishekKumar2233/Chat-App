@@ -52,7 +52,7 @@ function MessageItem({ message, handleAdmin, handleLike, handleDelete }) {
         ></ProfileAvatar>
         <span className="ml-2">{Avatar.name}</span>
         <ProfileInfoBtnModel profile={author}>
-          {canGrantAdmin && (
+          {/* {canGrantAdmin && (
             <Button
               block
               color="blue"
@@ -63,7 +63,7 @@ function MessageItem({ message, handleAdmin, handleLike, handleDelete }) {
                 ? " Remove as Admin Permission"
                 : " Give admin in the Group"}
             </Button>
-          )}
+          )} */}
         </ProfileInfoBtnModel>
         <PresenceUserDot uid={author.uid} />
         <TimeAgo
