@@ -13,7 +13,7 @@ function Top() {
   const isMobile = useMediaQuery("(max-width: 992px");
   return (
     <div>
-      <div className="d-flex justify-content-between align-item-center">
+      <div className="d-flex justify-content-between align-item-center" style={{marginTop:'20px'}}>
         <h4 className="text-disappear d-flex align-items-center">
           {/* <Icon as={Link} to="/" icon="arrow-circle-left" size="2x" /> */}
           <Link
@@ -54,7 +54,7 @@ function Top() {
               </g>
             </svg>
           </Link>
-          <span className="text-disappear">{name}</span>
+          <span className="text-disappear" style={{marginTop:'10px'}}>{name}</span>
         </h4>
         <ButtonToolbar className="ws-nowrap">
           {isAdmin && <EditRoomBtnDrawer />}
