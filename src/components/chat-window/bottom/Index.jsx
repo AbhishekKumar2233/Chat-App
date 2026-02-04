@@ -31,39 +31,93 @@ export default function Bottom() {
     setInput(value);
   }, []);
 
-  const onSendClick = async () => {
-    if (!input.trim()) return;
+  // const onSendClick = async () => {
+  //   if (!input.trim()) return;
   
-    // Assemble the message data
-    const msgData = {
-      ...assembleMessage(profile, chatId),
-      text: input.trim(),
-    };
+  //   // Assemble the message data
+  //   const msgData = {
+  //     ...assembleMessage(profile, chatId),
+  //     text: input.trim(),
+  //   };
   
-    // Generate the message ID before updating
+  //   // Generate the message ID before updating
+  //   const messageRef = push(ref(database, "messages"));
+  //   const messageId = messageRef.key;
+  
+  //   const updates = {
+  //     [`/messages/${messageId}`]: msgData,
+  //     [`/rooms/${chatId}/lastMessage`]: { ...msgData, msgId: messageId },
+  //   };
+  
+  //   // isLoading(true);
+  
+  //   try {
+  //     // Update both messages and room's lastMessage
+  //     await update(ref(database), updates);
+  
+  //     // Clear input only after a successful send
+  //     setInput("");
+  //   } catch (error) {
+  //           console.log(database,"databaseupdates",updates)
+
+  //     console.error("Error sending message:", error);
+  //     alert("Failed to send message. Please try again.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };  
+
+// import { ref, push, update, serverTimestamp } from "firebase/database";
+// import { database } from "./firebase"; // adjust path if needed
+
+const onSendClick = async () => {
+  if (!input || !input.trim()) return;
+
+  try {
+    setLoading(true);
+
+    // Create message ref FIRST
     const messageRef = push(ref(database, "messages"));
     const messageId = messageRef.key;
-  
-    const updates = {
-      [`/messages/${messageId}`]: msgData,
-      [`/rooms/${chatId}/lastMessage`]: { ...msgData, msgId: messageId },
+
+    // Build FULLY DEFINED message object
+    const msgData = {
+      msgId: messageId,
+      chatId: chatId,
+      text: input.trim(),
+
+      author: {
+        uid: profile.uid,
+        name: profile.name || "Unknown",
+        avatar: profile.avatar || "",
+        createdAt: serverTimestamp(), // 🔥 NEVER undefined
+      },
+
+      createdAt: serverTimestamp(),
+      type: "text",
     };
-  
-    // isLoading(true);
-  
-    try {
-      // Update both messages and room's lastMessage
-      await update(ref(database), updates);
-  
-      // Clear input only after a successful send
-      setInput("");
-    } catch (error) {
-      console.error("Error sending message:", error);
-      alert("Failed to send message. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };  
+
+    const updates = {};
+    updates[`/messages/${messageId}`] = msgData;
+    updates[`/rooms/${chatId}/lastMessage`] = {
+      msgId: messageId,
+      text: msgData.text,
+      authorId: profile.uid,
+      createdAt: serverTimestamp(),
+    };
+
+    await update(ref(database), updates);
+
+    setInput("");
+        alert("Message is send successfully.");
+  } catch (error) {
+    console.error("Error sending message:", error);
+    alert("Failed to send message.");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const onKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -107,7 +161,7 @@ export default function Bottom() {
   return (
     <div>
       <InputGroup>
-        <AttachmentBtnModel afterUpload={afterUpload} />
+        {/* <AttachmentBtnModel afterUpload={afterUpload} /> */}
         <Input
           placeholder="Write a new message..."
           value={input}
