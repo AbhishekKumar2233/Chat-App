@@ -23,13 +23,23 @@ import { getAuth } from "firebase/auth"; // Firebase v9+ for Auth
 import { getStorage } from 'firebase/storage'; // Firebase v9+ for Storage
 
 // Your Firebase configuration
+// const firebaseConfig = {
+//   apiKey: "AIzaSyA7WFds7lrw3Qc638JPdwImD6znLS_a08Q",
+//   authDomain: "chat-web-app-97e0f.firebaseapp.com",
+//   projectId: "project-275378454444",
+//   storageBucket: "chat-web-app-97e0f.appspot.com",
+//   messagingSenderId: "408229915654",
+//   appId: "1:408229915654:web:1b2e0096683001a549e787"
+// };
 const firebaseConfig = {
-  apiKey: "AIzaSyA7WFds7lrw3Qc638JPdwImD6znLS_a08Q",
-  authDomain: "chat-web-app-97e0f.firebaseapp.com",
-  projectId: "chat-web-app-97e0f",
-  storageBucket: "chat-web-app-97e0f.appspot.com",
-  messagingSenderId: "408229915654",
-  appId: "1:408229915654:web:1b2e0096683001a549e787"
+  apiKey: "AIzaSyCnhROrBrALEt5ZXuQ8UXktPeMnIsHGbJk",
+  authDomain: "chatapp1-f3d52.firebaseapp.com",
+  databaseURL: "https://chatapp1-f3d52-default-rtdb.firebaseio.com",
+  projectId: "chatapp1-f3d52",
+  storageBucket: "chatapp1-f3d52.firebasestorage.app",
+  messagingSenderId: "275378454444",
+  appId: "1:275378454444:web:278bd3c809ea821787c409",
+  measurementId: "G-ET7L00DRRF"
 };
 
 // Initialize Firebase
