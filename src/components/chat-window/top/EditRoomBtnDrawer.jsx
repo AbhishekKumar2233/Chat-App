@@ -35,8 +35,8 @@ export default function EditRoomBtnDrawer() {
   const description = useCurrentRoom((v) => v.description);
   return (
     <div>
-      <Button className="br-circle" size="sm" onClick={open}>
-        A
+      <Button className="br-circle" color="primary" size="sm" onClick={open}>
+        Edit
       </Button>
 
       <Drawer full={isMoblie} open={isOpen} onClose={close} placement="right">
