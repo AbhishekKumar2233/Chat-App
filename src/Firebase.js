@@ -25,7 +25,7 @@ import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
     apiKey: "AIzaSyA7WFds7lrw3Qc638JPdwImD6znLS_a08Q",
-    authDomain: "chat-web-app-97e0f.firebaseapp.com",
+    authDomain: "chat-app-tau-nine-50.vercel.app",
     projectId: "chat-web-app-97e0f",
     storageBucket: "chat-web-app-97e0f.appspot.com",
     messagingSenderId: "408229915654",
